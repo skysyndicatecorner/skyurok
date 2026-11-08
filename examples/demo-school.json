@@ -1,0 +1,8478 @@
+{
+  "format_version": 1,
+  "school": {
+    "name": "МБОУ «Демо-школа №1» (два корпуса)",
+    "settings": {
+      "days_per_week": 5,
+      "periods_per_day": 7,
+      "break_enough_for_building_change": false,
+      "classes_may_start_later": false,
+      "hygiene": {
+        "name": "Демо: пик во вторник/среду (сверьте с СанПиН 1.2.3685-21)",
+        "peak_days": [
+          1,
+          2
+        ],
+        "light_days": []
+      },
+      "weights": {
+        "unplaced": 1000,
+        "class_window": 40,
+        "class_over_max": 60,
+        "class_under_min": 15,
+        "teacher_single_window": 6,
+        "teacher_multi_window": 12,
+        "teacher_one_lesson_day": 5,
+        "teacher_building_change": 10,
+        "teacher_if_needed_slot": 4,
+        "teacher_methodical_day_violation": 8,
+        "position_violation": 25,
+        "hygiene_peak": 6,
+        "hygiene_hardest_at_edge": 2
+      }
+    },
+    "buildings": [
+      {
+        "id": 1,
+        "name": "Главный корпус",
+        "address": "ул. Школьная, 1",
+        "bells": [
+          {
+            "period": 0,
+            "start": "08:30",
+            "end": "09:15"
+          },
+          {
+            "period": 1,
+            "start": "09:25",
+            "end": "10:10"
+          },
+          {
+            "period": 2,
+            "start": "10:30",
+            "end": "11:15"
+          },
+          {
+            "period": 3,
+            "start": "11:35",
+            "end": "12:20"
+          },
+          {
+            "period": 4,
+            "start": "12:30",
+            "end": "13:15"
+          },
+          {
+            "period": 5,
+            "start": "13:25",
+            "end": "14:10"
+          },
+          {
+            "period": 6,
+            "start": "14:20",
+            "end": "15:05"
+          }
+        ],
+        "travel_minutes": [
+          [
+            2,
+            12
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Начальная школа",
+        "address": "ул. Садовая, 7",
+        "bells": [
+          {
+            "period": 0,
+            "start": "08:30",
+            "end": "09:10"
+          },
+          {
+            "period": 1,
+            "start": "09:25",
+            "end": "10:05"
+          },
+          {
+            "period": 2,
+            "start": "10:25",
+            "end": "11:05"
+          },
+          {
+            "period": 3,
+            "start": "11:25",
+            "end": "12:05"
+          },
+          {
+            "period": 4,
+            "start": "12:20",
+            "end": "13:00"
+          },
+          {
+            "period": 5,
+            "start": "13:10",
+            "end": "13:50"
+          },
+          {
+            "period": 6,
+            "start": "14:00",
+            "end": "14:40"
+          }
+        ],
+        "travel_minutes": [
+          [
+            1,
+            12
+          ]
+        ]
+      }
+    ],
+    "rooms": [
+      {
+        "id": 1,
+        "name": "101",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 2,
+        "name": "102",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 3,
+        "name": "103",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 4,
+        "name": "104",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 5,
+        "name": "105",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 6,
+        "name": "106",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 7,
+        "name": "107",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 8,
+        "name": "108",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 9,
+        "name": "109",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 10,
+        "name": "110",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 11,
+        "name": "111",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 12,
+        "name": "112",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 13,
+        "name": "Спортзал",
+        "building": 1,
+        "capacity": 60,
+        "parallel_groups": 2,
+        "tags": [
+          "спортзал"
+        ],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 14,
+        "name": "Информатика",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [
+          "информатика"
+        ],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 15,
+        "name": "Химия",
+        "building": 1,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [
+          "химия"
+        ],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 16,
+        "name": "201",
+        "building": 2,
+        "capacity": 28,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 17,
+        "name": "202",
+        "building": 2,
+        "capacity": 28,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 18,
+        "name": "203",
+        "building": 2,
+        "capacity": 28,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 19,
+        "name": "204",
+        "building": 2,
+        "capacity": 28,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 20,
+        "name": "205",
+        "building": 2,
+        "capacity": 28,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 21,
+        "name": "206",
+        "building": 2,
+        "capacity": 28,
+        "parallel_groups": 1,
+        "tags": [],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 22,
+        "name": "Спортзал НШ",
+        "building": 2,
+        "capacity": 30,
+        "parallel_groups": 1,
+        "tags": [
+          "спортзал"
+        ],
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      }
+    ],
+    "subjects": [
+      {
+        "id": 1,
+        "name": "Русский язык",
+        "short": "Рус",
+        "area": "Филология",
+        "difficulty": [
+          7,
+          7,
+          9
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Литература",
+        "short": "Лит",
+        "area": "Филология",
+        "difficulty": [
+          5,
+          4,
+          4
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Литературное чтение",
+        "short": "Лит.чт",
+        "area": "Филология",
+        "difficulty": [
+          5,
+          5,
+          5
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Математика",
+        "short": "Мат",
+        "area": "Математика",
+        "difficulty": [
+          8,
+          10,
+          10
+        ]
+      },
+      {
+        "id": 5,
+        "name": "Алгебра",
+        "short": "Алг",
+        "area": "Математика",
+        "difficulty": [
+          0,
+          9,
+          10
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Геометрия",
+        "short": "Геом",
+        "area": "Математика",
+        "difficulty": [
+          0,
+          9,
+          11
+        ]
+      },
+      {
+        "id": 7,
+        "name": "Информатика",
+        "short": "Инф",
+        "area": "Математика",
+        "difficulty": [
+          0,
+          7,
+          6
+        ]
+      },
+      {
+        "id": 8,
+        "name": "Английский язык",
+        "short": "Англ",
+        "area": "Филология",
+        "difficulty": [
+          7,
+          9,
+          8
+        ]
+      },
+      {
+        "id": 9,
+        "name": "Окружающий мир",
+        "short": "Окр",
+        "area": "Естествознание",
+        "difficulty": [
+          6,
+          6,
+          6
+        ]
+      },
+      {
+        "id": 10,
+        "name": "История",
+        "short": "Ист",
+        "area": "Обществознание",
+        "difficulty": [
+          0,
+          5,
+          5
+        ]
+      },
+      {
+        "id": 11,
+        "name": "Обществознание",
+        "short": "Общ",
+        "area": "Обществознание",
+        "difficulty": [
+          0,
+          6,
+          5
+        ]
+      },
+      {
+        "id": 12,
+        "name": "География",
+        "short": "Гео",
+        "area": "Естествознание",
+        "difficulty": [
+          0,
+          6,
+          3
+        ]
+      },
+      {
+        "id": 13,
+        "name": "Биология",
+        "short": "Био",
+        "area": "Естествознание",
+        "difficulty": [
+          0,
+          7,
+          7
+        ]
+      },
+      {
+        "id": 14,
+        "name": "Физика",
+        "short": "Физ",
+        "area": "Естествознание",
+        "difficulty": [
+          0,
+          9,
+          9
+        ]
+      },
+      {
+        "id": 15,
+        "name": "Химия",
+        "short": "Хим",
+        "area": "Естествознание",
+        "difficulty": [
+          0,
+          10,
+          11
+        ]
+      },
+      {
+        "id": 16,
+        "name": "ИЗО",
+        "short": "ИЗО",
+        "area": "Искусство",
+        "difficulty": [
+          3,
+          3,
+          3
+        ]
+      },
+      {
+        "id": 17,
+        "name": "Музыка",
+        "short": "Муз",
+        "area": "Искусство",
+        "difficulty": [
+          3,
+          2,
+          2
+        ]
+      },
+      {
+        "id": 18,
+        "name": "Технология",
+        "short": "Техн",
+        "area": "Технология",
+        "difficulty": [
+          2,
+          4,
+          4
+        ]
+      },
+      {
+        "id": 19,
+        "name": "Физическая культура",
+        "short": "Физ-ра",
+        "area": "Физическая культура",
+        "difficulty": [
+          1,
+          2,
+          2
+        ]
+      }
+    ],
+    "teachers": [
+      {
+        "id": 1,
+        "last_name": "Иванова",
+        "first_name": "Анна",
+        "middle_name": "Сергеевна",
+        "subjects": [
+          1,
+          4,
+          3,
+          9,
+          16,
+          18
+        ],
+        "home_room": 16,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 2,
+        "last_name": "Петров",
+        "first_name": "Игорь",
+        "middle_name": "Петрович",
+        "subjects": [
+          1,
+          4,
+          3,
+          9,
+          16,
+          18
+        ],
+        "home_room": 17,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 3,
+        "last_name": "Смирнова",
+        "first_name": "Елена",
+        "middle_name": "Викторовна",
+        "subjects": [
+          1,
+          4,
+          3,
+          9,
+          16,
+          18
+        ],
+        "home_room": 18,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 4,
+        "last_name": "Кузнецов",
+        "first_name": "Олег",
+        "middle_name": "Николаевич",
+        "subjects": [
+          1,
+          4,
+          3,
+          9,
+          16,
+          18
+        ],
+        "home_room": 19,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 5,
+        "last_name": "Попова",
+        "first_name": "Мария",
+        "middle_name": "Андреевна",
+        "subjects": [
+          1,
+          4,
+          3,
+          9,
+          16,
+          18
+        ],
+        "home_room": 20,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 6,
+        "last_name": "Васильев",
+        "first_name": "Дмитрий",
+        "middle_name": "Ильич",
+        "subjects": [
+          1,
+          2
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 7,
+        "last_name": "Соколова",
+        "first_name": "Ольга",
+        "middle_name": "Павловна",
+        "subjects": [
+          1,
+          2
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 8,
+        "last_name": "Михайлов",
+        "first_name": "Сергей",
+        "middle_name": "Юрьевич",
+        "subjects": [
+          4,
+          5,
+          6
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 9,
+        "last_name": "Новикова",
+        "first_name": "Татьяна",
+        "middle_name": "Олеговна",
+        "subjects": [
+          4,
+          5,
+          6
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 10,
+        "last_name": "Фёдоров",
+        "first_name": "Алексей",
+        "middle_name": "Иванович",
+        "subjects": [
+          8
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 11,
+        "last_name": "Морозова",
+        "first_name": "Анна",
+        "middle_name": "Сергеевна",
+        "subjects": [
+          8
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 12,
+        "last_name": "Волков",
+        "first_name": "Игорь",
+        "middle_name": "Петрович",
+        "subjects": [
+          8
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 13,
+        "last_name": "Алексеева",
+        "first_name": "Елена",
+        "middle_name": "Викторовна",
+        "subjects": [
+          10,
+          11
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 1,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 14,
+        "last_name": "Лебедев",
+        "first_name": "Олег",
+        "middle_name": "Николаевич",
+        "subjects": [
+          12
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": [
+            4
+          ]
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 15,
+        "last_name": "Семёнова",
+        "first_name": "Мария",
+        "middle_name": "Андреевна",
+        "subjects": [
+          13,
+          15
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 16,
+        "last_name": "Егоров",
+        "first_name": "Дмитрий",
+        "middle_name": "Ильич",
+        "subjects": [
+          14,
+          7
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 17,
+        "last_name": "Павлова",
+        "first_name": "Ольга",
+        "middle_name": "Павловна",
+        "subjects": [
+          7,
+          5
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 18,
+        "last_name": "Козлов",
+        "first_name": "Сергей",
+        "middle_name": "Юрьевич",
+        "subjects": [
+          16,
+          17,
+          18
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 19,
+        "last_name": "Степанова",
+        "first_name": "Татьяна",
+        "middle_name": "Олеговна",
+        "subjects": [
+          16,
+          17,
+          18
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [
+            {
+              "day": 0,
+              "period": 6
+            },
+            {
+              "day": 1,
+              "period": 6
+            },
+            {
+              "day": 2,
+              "period": 6
+            },
+            {
+              "day": 3,
+              "period": 6
+            },
+            {
+              "day": 4,
+              "period": 6
+            }
+          ],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 20,
+        "last_name": "Николаев",
+        "first_name": "Алексей",
+        "middle_name": "Иванович",
+        "subjects": [
+          19
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 21,
+        "last_name": "Орлова",
+        "first_name": "Анна",
+        "middle_name": "Сергеевна",
+        "subjects": [
+          19
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 22,
+        "last_name": "Андреев",
+        "first_name": "Игорь",
+        "middle_name": "Петрович",
+        "subjects": [
+          19
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": false,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": ""
+      },
+      {
+        "id": 23,
+        "last_name": "Макарова",
+        "first_name": "Елена",
+        "middle_name": "Викторовна",
+        "subjects": [
+          4,
+          5
+        ],
+        "home_room": null,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        },
+        "ignore_windows": true,
+        "methodical_days": 0,
+        "max_substitutions_per_week": 6,
+        "can_substitute": true,
+        "phone": "",
+        "note": "Завуч"
+      }
+    ],
+    "classes": [
+      {
+        "id": 1,
+        "name": "1а",
+        "grade": 1,
+        "students": 25,
+        "shift": 1,
+        "building": 2,
+        "max_per_day": 5,
+        "min_per_day": 4,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 2,
+        "name": "1б",
+        "grade": 1,
+        "students": 24,
+        "shift": 1,
+        "building": 2,
+        "max_per_day": 5,
+        "min_per_day": 4,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 3,
+        "name": "2а",
+        "grade": 2,
+        "students": 26,
+        "shift": 1,
+        "building": 2,
+        "max_per_day": 5,
+        "min_per_day": 4,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 4,
+        "name": "3а",
+        "grade": 3,
+        "students": 27,
+        "shift": 1,
+        "building": 2,
+        "max_per_day": 5,
+        "min_per_day": 4,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 5,
+        "name": "4а",
+        "grade": 4,
+        "students": 25,
+        "shift": 1,
+        "building": 2,
+        "max_per_day": 5,
+        "min_per_day": 4,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 6,
+        "name": "5а",
+        "grade": 5,
+        "students": 28,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 6,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 7,
+        "name": "5б",
+        "grade": 5,
+        "students": 26,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 6,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 8,
+        "name": "6а",
+        "grade": 6,
+        "students": 27,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 6,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 9,
+        "name": "7а",
+        "grade": 7,
+        "students": 25,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 7,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 10,
+        "name": "8а",
+        "grade": 8,
+        "students": 26,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 7,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 11,
+        "name": "9а",
+        "grade": 9,
+        "students": 24,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 7,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 12,
+        "name": "10а",
+        "grade": 10,
+        "students": 22,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 7,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      },
+      {
+        "id": 13,
+        "name": "11а",
+        "grade": 11,
+        "students": 20,
+        "shift": 1,
+        "building": 1,
+        "max_per_day": 7,
+        "min_per_day": 5,
+        "availability": {
+          "blocked": [],
+          "if_needed": [],
+          "days_off": []
+        }
+      }
+    ],
+    "loads": [
+      {
+        "id": 1,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 1,
+            "subject": 1,
+            "rooms": [
+              16
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 2,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 1,
+            "subject": 4,
+            "rooms": [
+              16
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 3,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 1,
+            "subject": 3,
+            "rooms": [
+              16
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 4,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 1,
+            "subject": 9,
+            "rooms": [
+              16
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 5,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 1,
+            "subject": 16,
+            "rooms": [
+              16
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 6,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 7,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 1,
+            "subject": 18,
+            "rooms": [
+              16
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 8,
+        "classes": [
+          1
+        ],
+        "hours_per_week": 3,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 20,
+            "subject": 19,
+            "rooms": [
+              22
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 9,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 2,
+            "subject": 1,
+            "rooms": [
+              17
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 10,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 2,
+            "subject": 4,
+            "rooms": [
+              17
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 11,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 2,
+            "subject": 3,
+            "rooms": [
+              17
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 12,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 2,
+            "subject": 9,
+            "rooms": [
+              17
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 13,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 2,
+            "subject": 16,
+            "rooms": [
+              17
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 14,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 15,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 2,
+            "subject": 18,
+            "rooms": [
+              17
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 16,
+        "classes": [
+          2
+        ],
+        "hours_per_week": 3,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 21,
+            "subject": 19,
+            "rooms": [
+              22
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 17,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 3,
+            "subject": 1,
+            "rooms": [
+              18
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 18,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 3,
+            "subject": 4,
+            "rooms": [
+              18
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 19,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 3,
+            "subject": 3,
+            "rooms": [
+              18
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 20,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 10,
+            "subject": 8,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 21,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 3,
+            "subject": 9,
+            "rooms": [
+              18
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 22,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 3,
+            "subject": 16,
+            "rooms": [
+              18
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 23,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 24,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 3,
+            "subject": 18,
+            "rooms": [
+              18
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 25,
+        "classes": [
+          3
+        ],
+        "hours_per_week": 3,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 22,
+            "subject": 19,
+            "rooms": [
+              22
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 26,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 4,
+            "subject": 1,
+            "rooms": [
+              19
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 27,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 4,
+            "subject": 4,
+            "rooms": [
+              19
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 28,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 4,
+            "subject": 3,
+            "rooms": [
+              19
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 29,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 30,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 4,
+            "subject": 9,
+            "rooms": [
+              19
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 31,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 4,
+            "subject": 16,
+            "rooms": [
+              19
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 32,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 33,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 4,
+            "subject": 18,
+            "rooms": [
+              19
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 34,
+        "classes": [
+          4
+        ],
+        "hours_per_week": 3,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 22,
+            "subject": 19,
+            "rooms": [
+              22
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 35,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 5,
+            "subject": 1,
+            "rooms": [
+              20
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 36,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 5,
+            "subject": 4,
+            "rooms": [
+              20
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 37,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 5,
+            "subject": 3,
+            "rooms": [
+              20
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 38,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 12,
+            "subject": 8,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 39,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 5,
+            "subject": 9,
+            "rooms": [
+              20
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 40,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 5,
+            "subject": 16,
+            "rooms": [
+              20
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 41,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 42,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 5,
+            "subject": 18,
+            "rooms": [
+              20
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 43,
+        "classes": [
+          5
+        ],
+        "hours_per_week": 3,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 21,
+            "subject": 19,
+            "rooms": [
+              22
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 44,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 45,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 46,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 4,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 47,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 12,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 14
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 14
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 48,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 49,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 50,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 14,
+            "subject": 12,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 51,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 16,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 52,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 53,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 18,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 54,
+        "classes": [
+          6
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 20,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 55,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 56,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 57,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 9,
+            "subject": 4,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 58,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 10,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 13
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 13
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 59,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 60,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 61,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 14,
+            "subject": 12,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 62,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 16,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 63,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 64,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 18,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 65,
+        "classes": [
+          7
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 20,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 66,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 67,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 68,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 5,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 9,
+            "subject": 4,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 69,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 12,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 13
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 14
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 70,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 71,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 72,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 14,
+            "subject": 12,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 73,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 16,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 74,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 17,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 75,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 19,
+            "subject": 18,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 76,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 21,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 77,
+        "classes": [
+          8
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 11,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 78,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 79,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 80,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 5,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 81,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 6,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 82,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 17,
+            "subject": 7,
+            "rooms": [
+              14
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 83,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 10,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 12
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 13
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 84,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 85,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 11,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 86,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 14,
+            "subject": 12,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 87,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 88,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 16,
+            "subject": 14,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 89,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 22,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 90,
+        "classes": [
+          9
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 18,
+            "subject": 18,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 91,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 92,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 93,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 5,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 94,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 6,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 95,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 17,
+            "subject": 7,
+            "rooms": [
+              14
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 96,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 12,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 13
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 13
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 97,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 98,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 11,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 99,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 14,
+            "subject": 12,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 100,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 101,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 16,
+            "subject": 14,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 102,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 20,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 103,
+        "classes": [
+          10
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 15,
+            "rooms": [
+              15
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 104,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 105,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 106,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 9,
+            "subject": 5,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 107,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 9,
+            "subject": 6,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 108,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 17,
+            "subject": 7,
+            "rooms": [
+              14
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 109,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 10,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 12
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 12
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 110,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 111,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 11,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 112,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 14,
+            "subject": 12,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 113,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 114,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 16,
+            "subject": 14,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 115,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 22,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 116,
+        "classes": [
+          11
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 15,
+            "rooms": [
+              15
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 117,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 118,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 6,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 119,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 9,
+            "subject": 5,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 120,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 9,
+            "subject": 6,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 121,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 17,
+            "subject": 7,
+            "rooms": [
+              14
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 122,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 12,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 11
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 11
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 123,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 124,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 11,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 125,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 16,
+            "subject": 14,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 126,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 15,
+            "rooms": [
+              15
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 127,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 128,
+        "classes": [
+          12
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 21,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 129,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 1,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 130,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 7,
+            "subject": 2,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 131,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 4,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 5,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 132,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 8,
+            "subject": 6,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 133,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 1,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 17,
+            "subject": 7,
+            "rooms": [
+              14
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 134,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 3,
+        "pairing": "Any",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 10,
+            "subject": 8,
+            "rooms": [],
+            "label": "1 гр.",
+            "students": 10
+          },
+          {
+            "teacher": 11,
+            "subject": 8,
+            "rooms": [],
+            "label": "2 гр.",
+            "students": 10
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 135,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 10,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 136,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 13,
+            "subject": 11,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 137,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 16,
+            "subject": 14,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 138,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 15,
+            "rooms": [
+              15
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 139,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 15,
+            "subject": 13,
+            "rooms": [],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      },
+      {
+        "id": 140,
+        "classes": [
+          13
+        ],
+        "hours_per_week": 2,
+        "pairing": "NoDouble",
+        "position": "Any",
+        "groups": [
+          {
+            "teacher": 20,
+            "subject": 19,
+            "rooms": [
+              13
+            ],
+            "label": "",
+            "students": null
+          }
+        ],
+        "paid": false
+      }
+    ]
+  },
+  "timetable": {
+    "lessons": [
+      {
+        "id": 1,
+        "load": 1,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 39,
+        "load": 15,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 65,
+        "load": 25,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 79,
+        "load": 29,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 104,
+        "load": 39,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 117,
+        "load": 45,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 156,
+        "load": 60,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 186,
+        "load": 75,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 210,
+        "load": 86,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 229,
+        "load": 95,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          14
+        ],
+        "pinned": false
+      },
+      {
+        "id": 249,
+        "load": 104,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 290,
+        "load": 123,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 310,
+        "load": 131,
+        "slot": {
+          "day": 0,
+          "period": 0
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 15,
+        "load": 4,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 25,
+        "load": 9,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 57,
+        "load": 20,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 87,
+        "load": 34,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 96,
+        "load": 36,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 133,
+        "load": 52,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 145,
+        "load": 56,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 183,
+        "load": 72,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 202,
+        "load": 82,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          14
+        ],
+        "pinned": false
+      },
+      {
+        "id": 223,
+        "load": 92,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 262,
+        "load": 110,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 297,
+        "load": 126,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 307,
+        "load": 131,
+        "slot": {
+          "day": 0,
+          "period": 1
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 20,
+        "load": 8,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 37,
+        "load": 13,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 58,
+        "load": 21,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 72,
+        "load": 27,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 100,
+        "load": 37,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 129,
+        "load": 48,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 147,
+        "load": 57,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 185,
+        "load": 74,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 197,
+        "load": 80,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 221,
+        "load": 91,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 250,
+        "load": 105,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 289,
+        "load": 122,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          5,
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 326,
+        "load": 139,
+        "slot": {
+          "day": 0,
+          "period": 2
+        },
+        "rooms": [
+          9
+        ],
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "load": 1,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 42,
+        "load": 16,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 52,
+        "load": 19,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 77,
+        "load": 28,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 107,
+        "load": 41,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 127,
+        "load": 47,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          3,
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 146,
+        "load": 57,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 165,
+        "load": 66,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 199,
+        "load": 80,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 244,
+        "load": 103,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 269,
+        "load": 114,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 277,
+        "load": 118,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 318,
+        "load": 135,
+        "slot": {
+          "day": 0,
+          "period": 3
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 17,
+        "load": 6,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 110,
+        "load": 43,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 123,
+        "load": 46,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 142,
+        "load": 55,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 190,
+        "load": 77,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 194,
+        "load": 78,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 232,
+        "load": 96,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          6,
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 272,
+        "load": 116,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 283,
+        "load": 120,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 322,
+        "load": 137,
+        "slot": {
+          "day": 0,
+          "period": 4
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 218,
+        "load": 91,
+        "slot": {
+          "day": 0,
+          "period": 5
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 254,
+        "load": 106,
+        "slot": {
+          "day": 0,
+          "period": 5
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "load": 3,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 34,
+        "load": 11,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 56,
+        "load": 20,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 66,
+        "load": 26,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 99,
+        "load": 37,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 125,
+        "load": 47,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          2,
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 161,
+        "load": 64,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 187,
+        "load": 75,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 200,
+        "load": 81,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 238,
+        "load": 100,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          9
+        ],
+        "pinned": false
+      },
+      {
+        "id": 248,
+        "load": 104,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 282,
+        "load": 119,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 321,
+        "load": 136,
+        "slot": {
+          "day": 1,
+          "period": 0
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "load": 3,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 23,
+        "load": 9,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 54,
+        "load": 19,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 75,
+        "load": 28,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 98,
+        "load": 37,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 135,
+        "load": 53,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 159,
+        "load": 63,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 177,
+        "load": 69,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          2,
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 198,
+        "load": 80,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 235,
+        "load": 98,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 256,
+        "load": 107,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 299,
+        "load": 127,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          9
+        ],
+        "pinned": false
+      },
+      {
+        "id": 306,
+        "load": 130,
+        "slot": {
+          "day": 1,
+          "period": 1
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "load": 1,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 24,
+        "load": 9,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 45,
+        "load": 17,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 74,
+        "load": 27,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 92,
+        "load": 35,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 114,
+        "load": 44,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 154,
+        "load": 59,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 169,
+        "load": 67,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 211,
+        "load": 87,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 230,
+        "load": 96,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          4,
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 271,
+        "load": 115,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 284,
+        "load": 120,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 308,
+        "load": 131,
+        "slot": {
+          "day": 1,
+          "period": 2
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 19,
+        "load": 8,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 35,
+        "load": 12,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 50,
+        "load": 18,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 68,
+        "load": 26,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 108,
+        "load": 42,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 116,
+        "load": 44,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 141,
+        "load": 55,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 180,
+        "load": 70,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 215,
+        "load": 89,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 240,
+        "load": 101,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 252,
+        "load": 106,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 287,
+        "load": 122,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          4,
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 312,
+        "load": 132,
+        "slot": {
+          "day": 1,
+          "period": 3
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 33,
+        "load": 11,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 48,
+        "load": 18,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 81,
+        "load": 30,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 121,
+        "load": 46,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 148,
+        "load": 57,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 189,
+        "load": 76,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 191,
+        "load": 78,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 237,
+        "load": 99,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 268,
+        "load": 114,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 288,
+        "load": 122,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          3,
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 302,
+        "load": 129,
+        "slot": {
+          "day": 1,
+          "period": 4
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 131,
+        "load": 50,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 150,
+        "load": 57,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 178,
+        "load": 69,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          2,
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 192,
+        "load": 78,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 228,
+        "load": 94,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 301,
+        "load": 128,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 323,
+        "load": 137,
+        "slot": {
+          "day": 1,
+          "period": 5
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "load": 1,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 41,
+        "load": 16,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 61,
+        "load": 23,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 76,
+        "load": 28,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 103,
+        "load": 38,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 119,
+        "load": 45,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 155,
+        "load": 59,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 171,
+        "load": 67,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 216,
+        "load": 89,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 245,
+        "load": 103,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 264,
+        "load": 112,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 279,
+        "load": 119,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 316,
+        "load": 134,
+        "slot": {
+          "day": 2,
+          "period": 0
+        },
+        "rooms": [
+          4,
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 14,
+        "load": 4,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 38,
+        "load": 14,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 47,
+        "load": 17,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 82,
+        "load": 30,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 111,
+        "load": 43,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 112,
+        "load": 44,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 144,
+        "load": 56,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 181,
+        "load": 70,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 205,
+        "load": 83,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          2,
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 236,
+        "load": 99,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 270,
+        "load": 115,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 280,
+        "load": 119,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 327,
+        "load": 139,
+        "slot": {
+          "day": 2,
+          "period": 1
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "load": 2,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 36,
+        "load": 12,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 60,
+        "load": 22,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 70,
+        "load": 26,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 95,
+        "load": 36,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 130,
+        "load": 49,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 163,
+        "load": 65,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 167,
+        "load": 66,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 209,
+        "load": 86,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 219,
+        "load": 91,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 258,
+        "load": 109,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          1,
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 285,
+        "load": 120,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 319,
+        "load": 135,
+        "slot": {
+          "day": 2,
+          "period": 2
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "load": 3,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 31,
+        "load": 11,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 49,
+        "load": 18,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 78,
+        "load": 28,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 97,
+        "load": 36,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 136,
+        "load": 54,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 139,
+        "load": 55,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 175,
+        "load": 68,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 204,
+        "load": 83,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          4,
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 225,
+        "load": 93,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 267,
+        "load": 113,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 275,
+        "load": 117,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 320,
+        "load": 136,
+        "slot": {
+          "day": 2,
+          "period": 3
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 46,
+        "load": 17,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 93,
+        "load": 35,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 115,
+        "load": 44,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 151,
+        "load": 58,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          1,
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 172,
+        "load": 68,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 212,
+        "load": 87,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 227,
+        "load": 94,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 251,
+        "load": 105,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 292,
+        "load": 124,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 329,
+        "load": 140,
+        "slot": {
+          "day": 2,
+          "period": 4
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 164,
+        "load": 66,
+        "slot": {
+          "day": 2,
+          "period": 5
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 242,
+        "load": 102,
+        "slot": {
+          "day": 2,
+          "period": 5
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 259,
+        "load": 109,
+        "slot": {
+          "day": 2,
+          "period": 5
+        },
+        "rooms": [
+          1,
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 276,
+        "load": 118,
+        "slot": {
+          "day": 2,
+          "period": 5
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 325,
+        "load": 138,
+        "slot": {
+          "day": 2,
+          "period": 5
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 247,
+        "load": 104,
+        "slot": {
+          "day": 2,
+          "period": 6
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 317,
+        "load": 134,
+        "slot": {
+          "day": 2,
+          "period": 6
+        },
+        "rooms": [
+          1,
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "load": 2,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 28,
+        "load": 10,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 63,
+        "load": 25,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 84,
+        "load": 32,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 89,
+        "load": 35,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 126,
+        "load": 47,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          3,
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 162,
+        "load": 65,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 166,
+        "load": 66,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 206,
+        "load": 84,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 239,
+        "load": 100,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 265,
+        "load": 112,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 286,
+        "load": 121,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          14
+        ],
+        "pinned": false
+      },
+      {
+        "id": 313,
+        "load": 132,
+        "slot": {
+          "day": 3,
+          "period": 0
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "load": 1,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 22,
+        "load": 9,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 55,
+        "load": 19,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 86,
+        "load": 34,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 105,
+        "load": 39,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 122,
+        "load": 46,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 157,
+        "load": 61,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 170,
+        "load": 67,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 208,
+        "load": 85,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 231,
+        "load": 96,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          2,
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 255,
+        "load": 107,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 296,
+        "load": 126,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 328,
+        "load": 140,
+        "slot": {
+          "day": 3,
+          "period": 1
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "load": 2,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 27,
+        "load": 10,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 43,
+        "load": 17,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 73,
+        "load": 27,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 94,
+        "load": 36,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 137,
+        "load": 54,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 138,
+        "load": 55,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 179,
+        "load": 69,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          1,
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 195,
+        "load": 79,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 234,
+        "load": 97,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 273,
+        "load": 116,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 281,
+        "load": 119,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 311,
+        "load": 132,
+        "slot": {
+          "day": 3,
+          "period": 2
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 16,
+        "load": 5,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 40,
+        "load": 16,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 44,
+        "load": 17,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 67,
+        "load": 26,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 90,
+        "load": 35,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 128,
+        "load": 48,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 140,
+        "load": 55,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 174,
+        "load": 68,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 213,
+        "load": 88,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 243,
+        "load": 102,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 266,
+        "load": 113,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 278,
+        "load": 118,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 315,
+        "load": 134,
+        "slot": {
+          "day": 3,
+          "period": 3
+        },
+        "rooms": [
+          2,
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 85,
+        "load": 33,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 109,
+        "load": 43,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 118,
+        "load": 45,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 143,
+        "load": 56,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 173,
+        "load": 68,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 203,
+        "load": 83,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          2,
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 226,
+        "load": 93,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 263,
+        "load": 111,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 294,
+        "load": 125,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 324,
+        "load": 138,
+        "slot": {
+          "day": 3,
+          "period": 4
+        },
+        "rooms": [
+          15
+        ],
+        "pinned": false
+      },
+      {
+        "id": 193,
+        "load": 78,
+        "slot": {
+          "day": 3,
+          "period": 5
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 13,
+        "load": 3,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 26,
+        "load": 9,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 64,
+        "load": 25,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 83,
+        "load": 31,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 101,
+        "load": 37,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 134,
+        "load": 53,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 153,
+        "load": 58,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          2,
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 188,
+        "load": 76,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 201,
+        "load": 81,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 222,
+        "load": 92,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 261,
+        "load": 110,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 298,
+        "load": 127,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 305,
+        "load": 130,
+        "slot": {
+          "day": 4,
+          "period": 0
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 18,
+        "load": 7,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 29,
+        "load": 10,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 53,
+        "load": 19,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 88,
+        "load": 34,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 91,
+        "load": 35,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 132,
+        "load": 51,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 152,
+        "load": 58,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          1,
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 182,
+        "load": 71,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 196,
+        "load": 79,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 233,
+        "load": 97,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 246,
+        "load": 104,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 300,
+        "load": 128,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          13
+        ],
+        "pinned": false
+      },
+      {
+        "id": 309,
+        "load": 131,
+        "slot": {
+          "day": 4,
+          "period": 1
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "load": 2,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 30,
+        "load": 10,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 59,
+        "load": 21,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 69,
+        "load": 26,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 106,
+        "load": 40,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          20
+        ],
+        "pinned": false
+      },
+      {
+        "id": 120,
+        "load": 46,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 149,
+        "load": 57,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 184,
+        "load": 73,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 217,
+        "load": 90,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          8
+        ],
+        "pinned": false
+      },
+      {
+        "id": 220,
+        "load": 91,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 260,
+        "load": 109,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          2,
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 291,
+        "load": 123,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 303,
+        "load": 129,
+        "slot": {
+          "day": 4,
+          "period": 2
+        },
+        "rooms": [
+          9
+        ],
+        "pinned": false
+      },
+      {
+        "id": 21,
+        "load": 8,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          22
+        ],
+        "pinned": false
+      },
+      {
+        "id": 32,
+        "load": 11,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          17
+        ],
+        "pinned": false
+      },
+      {
+        "id": 51,
+        "load": 18,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 71,
+        "load": 27,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          19
+        ],
+        "pinned": false
+      },
+      {
+        "id": 102,
+        "load": 38,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 113,
+        "load": 44,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 158,
+        "load": 62,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 176,
+        "load": 68,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 214,
+        "load": 88,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 224,
+        "load": 93,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 257,
+        "load": 108,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          14
+        ],
+        "pinned": false
+      },
+      {
+        "id": 293,
+        "load": 124,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 304,
+        "load": 130,
+        "slot": {
+          "day": 4,
+          "period": 3
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 62,
+        "load": 24,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          18
+        ],
+        "pinned": false
+      },
+      {
+        "id": 80,
+        "load": 29,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          16
+        ],
+        "pinned": false
+      },
+      {
+        "id": 124,
+        "load": 46,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          5
+        ],
+        "pinned": false
+      },
+      {
+        "id": 160,
+        "load": 64,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          3
+        ],
+        "pinned": false
+      },
+      {
+        "id": 168,
+        "load": 66,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      },
+      {
+        "id": 207,
+        "load": 84,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          4
+        ],
+        "pinned": false
+      },
+      {
+        "id": 241,
+        "load": 101,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          6
+        ],
+        "pinned": false
+      },
+      {
+        "id": 253,
+        "load": 106,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          2
+        ],
+        "pinned": false
+      },
+      {
+        "id": 274,
+        "load": 117,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          7
+        ],
+        "pinned": false
+      },
+      {
+        "id": 314,
+        "load": 133,
+        "slot": {
+          "day": 4,
+          "period": 4
+        },
+        "rooms": [
+          14
+        ],
+        "pinned": false
+      },
+      {
+        "id": 295,
+        "load": 125,
+        "slot": {
+          "day": 4,
+          "period": 5
+        },
+        "rooms": [
+          1
+        ],
+        "pinned": false
+      }
+    ]
+  },
+  "absences": [
+    {
+      "id": 1,
+      "teacher": 8,
+      "from": "2026-11-10",
+      "to": "2026-11-11",
+      "reason": "больничный",
+      "periods": null
+    },
+    {
+      "id": 2,
+      "teacher": 10,
+      "from": "2026-11-10",
+      "to": "2026-11-10",
+      "reason": "курсы",
+      "periods": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "replacements": [
+    {
+      "id": 1,
+      "date": "2026-11-10",
+      "lesson": 56,
+      "group": 0,
+      "original_teacher": 10,
+      "kind": {
+        "Substitute": {
+          "teacher": 3,
+          "subject": 8
+        }
+      },
+      "room": null,
+      "note": "смежный предмет (область «Филология»)",
+      "confirmed": false
+    },
+    {
+      "id": 6,
+      "date": "2026-11-10",
+      "lesson": 200,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 16,
+          "subject": 6
+        }
+      },
+      "room": null,
+      "note": "смежный предмет (область «Математика»)",
+      "confirmed": false
+    },
+    {
+      "id": 7,
+      "date": "2026-11-10",
+      "lesson": 198,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 16,
+          "subject": 5
+        }
+      },
+      "room": null,
+      "note": "смежный предмет (область «Математика»)",
+      "confirmed": false
+    },
+    {
+      "id": 3,
+      "date": "2026-11-10",
+      "lesson": 308,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 16,
+          "subject": 5
+        }
+      },
+      "room": null,
+      "note": "смежный предмет (область «Математика»)",
+      "confirmed": false
+    },
+    {
+      "id": 5,
+      "date": "2026-11-10",
+      "lesson": 312,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 15,
+          "subject": 13
+        }
+      },
+      "room": null,
+      "note": "проведёт свой предмет: Биология",
+      "confirmed": false
+    },
+    {
+      "id": 8,
+      "date": "2026-11-10",
+      "lesson": 121,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 1,
+          "subject": 4
+        }
+      },
+      "room": null,
+      "note": "ведёт этот предмет",
+      "confirmed": false
+    },
+    {
+      "id": 9,
+      "date": "2026-11-10",
+      "lesson": 228,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 13,
+          "subject": 10
+        }
+      },
+      "room": null,
+      "note": "проведёт свой предмет: История",
+      "confirmed": false
+    },
+    {
+      "id": 4,
+      "date": "2026-11-11",
+      "lesson": 225,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 17,
+          "subject": 5
+        }
+      },
+      "room": null,
+      "note": "ведёт этот предмет",
+      "confirmed": false
+    },
+    {
+      "id": 2,
+      "date": "2026-11-11",
+      "lesson": 227,
+      "group": 0,
+      "original_teacher": 8,
+      "kind": {
+        "Substitute": {
+          "teacher": 14,
+          "subject": 12
+        }
+      },
+      "room": null,
+      "note": "проведёт свой предмет: География",
+      "confirmed": false
+    }
+  ],
+  "class_absences": []
+}

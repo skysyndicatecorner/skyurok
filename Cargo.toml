@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = ["crates/core", "crates/cli", "crates/app"]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+authors = ["skysyndicatecorner"]
+repository = "https://github.com/skysyndicatecorner/skyurok"
+homepage = "https://github.com/skysyndicatecorner/skyurok"
+description = "Составление школьного расписания и замен"
+keywords = ["school", "timetable", "schedule"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

@@ -1,0 +1,16 @@
+name: Предложение
+description: Чего не хватает в работе
+labels: [предложение]
+body:
+  - type: textarea
+    attributes:
+      label: Какую задачу нужно решить
+      description: Опишите ситуацию в школе, а не готовое решение. Например, «учителя узнают о заменах слишком поздно».
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Как вы решаете её сейчас
+  - type: textarea
+    attributes:
+      label: Как это могло бы выглядеть

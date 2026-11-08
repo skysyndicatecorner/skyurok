@@ -1,0 +1,18 @@
+[package]
+name = "skyurok-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "Ядро SkyUrok: модель школы, генератор расписания, анализ конфликтов, подбор замен, экспорт"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["std", "serde", "clock"] }
+encoding_rs = "0.8.44"
+printpdf = { version = "0.7.0", default-features = false, features = ["font_subsetting"] }
+zip = { version = "2", default-features = false, features = ["deflate"] }
+ttf-parser = "0.25"

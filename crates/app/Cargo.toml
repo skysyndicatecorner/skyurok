@@ -1,0 +1,96 @@
+[package]
+name = "skyurok-app"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+description = "SkyUrok — составление школьного расписания и замен"
+
+[[bin]]
+name = "skyurok-app"
+path = "src/main.rs"
+
+[lib]
+name = "skyurok_app"
+path = "src/lib.rs"
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+skyurok-core = { path = "../core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["std", "serde", "clock"] }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+rfd = { version = "0.18", default-features = false, features = ["xdg-portal", "pollster"] }
+webbrowser = "1"
+
+# Windows: wgpu (DirectX 12 / Vulkan) — работает и через удалённый рабочий стол,
+# и на компьютерах без драйвера OpenGL.
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "0.37", default-features = false, features = ["default_fonts", "wgpu", "persistence", "accesskit", "clipboard", "links"] }
+
+# Linux и прочие: OpenGL — меньше размер, работает на старом железе.
+[target.'cfg(all(not(windows), not(target_os = "android")))'.dependencies]
+eframe = { version = "0.37", default-features = false, features = ["default_fonts", "glow", "persistence", "wayland", "x11", "accesskit", "clipboard", "links"] }
+
+[target.'cfg(target_os = "android")'.dependencies]
+eframe = { version = "0.37", default-features = false, features = ["default_fonts", "glow", "persistence", "android-native-activity"] }
+winit = { version = "0.30", features = ["android-native-activity"] }
+
+# Сборка APK: cargo apk build --release -p skyurok-app --lib
+[package.metadata.android]
+package = "ru.skyurok.app"
+apk_name = "SkyUrok"
+build_targets = ["aarch64-linux-android", "armv7-linux-androideabi"]
+
+[package.metadata.android.sdk]
+min_sdk_version = 24
+target_sdk_version = 34
+
+[package.metadata.android.application]
+label = "SkyUrok"
+
+[package.metadata.android.application.activity]
+orientation = "landscape"
+
+[target.'cfg(windows)'.build-dependencies]
+winresource = "0.1"
+
+# Пакет .deb (Debian, Ubuntu, Astra Linux): cargo deb -p skyurok-app
+[package.metadata.deb]
+name = "skyurok"
+maintainer = "skysyndicatecorner"
+copyright = "2026 skysyndicatecorner"
+license-file = ["../../LICENSE", "0"]
+extended-description = "Составление школьного расписания и замен: несколько зданий, автоматический подбор замен, печать в Word и PDF."
+section = "education"
+priority = "optional"
+depends = "libc6 (>= 2.28)"
+recommends = "libgl1, libegl1, libxkbcommon0, libxkbcommon-x11-0, xdg-desktop-portal"
+assets = [
+    ["target/release/skyurok-app", "usr/bin/", "755"],
+    ["target/release/skyurok", "usr/bin/", "755"],
+    ["../../packaging/linux/skyurok.desktop", "usr/share/applications/", "644"],
+    ["assets/icon-256.png", "usr/share/icons/hicolor/256x256/apps/skyurok.png", "644"],
+    ["../../examples/demo-school.json", "usr/share/skyurok/", "644"],
+    ["../../README.md", "usr/share/doc/skyurok/", "644"],
+    ["../../LICENSE", "usr/share/doc/skyurok/", "644"],
+]
+
+# Пакет .rpm (РЕД ОС, Альт, Fedora): cargo generate-rpm -p crates/app
+[package.metadata.generate-rpm]
+name = "skyurok"
+summary = "Составление школьного расписания и замен"
+license = "AGPL-3.0-or-later"
+auto-req = "no"
+assets = [
+    { source = "target/release/skyurok-app", dest = "/usr/bin/skyurok-app", mode = "755" },
+    { source = "target/release/skyurok", dest = "/usr/bin/skyurok", mode = "755" },
+    { source = "packaging/linux/skyurok.desktop", dest = "/usr/share/applications/skyurok.desktop", mode = "644" },
+    { source = "crates/app/assets/icon-256.png", dest = "/usr/share/icons/hicolor/256x256/apps/skyurok.png", mode = "644" },
+    { source = "examples/demo-school.json", dest = "/usr/share/skyurok/demo-school.json", mode = "644" },
+    { source = "LICENSE", dest = "/usr/share/licenses/skyurok/LICENSE", mode = "644", doc = true },
+]

@@ -1,0 +1,9 @@
+/target/
+/dist/
+/pkg/
+*.rtt
+*.keystore
+crash.log
+autosave.json
+.DS_Store
+Thumbs.db

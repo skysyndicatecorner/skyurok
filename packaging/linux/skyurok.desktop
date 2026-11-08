@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=SkyUrok
+GenericName=Школьное расписание
+Comment=Составление школьного расписания и замен
+Exec=skyurok-app %f
+Icon=skyurok
+Terminal=false
+Categories=Education;Office;
+Keywords=расписание;замены;школа;timetable;schedule;
+StartupWMClass=skyurok

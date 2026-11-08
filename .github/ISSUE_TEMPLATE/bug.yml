@@ -1,0 +1,34 @@
+name: Ошибка
+description: Программа работает не так, как должна
+labels: [ошибка]
+body:
+  - type: textarea
+    attributes:
+      label: Что произошло
+      description: Что вы делали и что увидели. Скриншот очень помогает.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Что ожидали
+  - type: input
+    attributes:
+      label: Версия SkyUrok
+      description: «Справка → О программе»
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Система
+      options: [Windows 10, Windows 11, Astra Linux, РЕД ОС, Альт, Ubuntu / Debian, Другой Linux, Android]
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Журнал сбоя
+      description: Если программа закрылась — содержимое crash.log из папки данных (путь в «О программе»).
+      render: text
+  - type: markdown
+    attributes:
+      value: "Не прикладывайте файлы с ФИО сотрудников и учеников. Если нужен файл проекта — замените имена."
