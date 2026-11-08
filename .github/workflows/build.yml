@@ -189,7 +189,7 @@ jobs:
         run: |
           cargo apk build --release -p skyurok-app --lib
           mkdir -p dist
-          cp target/release/apk/*.apk dist/SkyUrok-android.apk
+          cp target/release/apk/SkyUrok.apk dist/SkyUrok-android.apk
       - name: Проверка APK
         run: |
           set -e
