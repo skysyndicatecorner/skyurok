@@ -528,11 +528,18 @@ impl<'a> Solver<'a> {
         let t0 = 30.0f64;
         let t1 = 0.2f64;
         let mut it = 0u64;
+        // Охлаждение: по доле итераций, а если их число не ограничено (так работает
+        // программа — «считать N секунд»), то по доле прошедшего времени. Без этого
+        // температура не падала и результат в программе был заметно хуже, чем в консоли.
+        let by_time = opts.max_iterations > 100_000_000;
+        let limit_s = opts.time_limit.as_secs_f64().max(0.001);
+        let mut time_frac = 0.0f64;
         while it < opts.max_iterations {
-            if it % 512 == 0 {
+            if it.is_multiple_of(512) {
                 if start.elapsed() > opts.time_limit || opts.stopped() {
                     break;
                 }
+                time_frac = (start.elapsed().as_secs_f64() / limit_s).min(1.0);
                 if let Some(p) = &opts.progress {
                     p.iterations.store(it, Ordering::Relaxed);
                     p.best_score.store(best, Ordering::Relaxed);
@@ -542,7 +549,7 @@ impl<'a> Solver<'a> {
             if best == 0 {
                 break;
             }
-            let frac = it as f64 / opts.max_iterations as f64;
+            let frac = if by_time { time_frac } else { it as f64 / opts.max_iterations as f64 };
             let temp = t0 * (t1 / t0).powf(frac);
             it += 1;
             // выбор юнита: с вероятностью 1/2 — нерасставленный, если есть
@@ -661,4 +668,36 @@ pub fn solve(school: &School, opts: &SolveOptions) -> SolveResult {
     let iterations = s.anneal(opts);
     let score = s.total();
     SolveResult { timetable: s.timetable(), score, unplaced: s.unplaced(), iterations, elapsed: start.elapsed() }
+}
+
+/// Сколько вариантов считать одновременно: по ядру на вариант, но не больше 4.
+pub fn default_threads() -> usize {
+    std::thread::available_parallelism().map(|n| n.get()).unwrap_or(1).clamp(1, 4)
+}
+
+/// Считает `threads` вариантов параллельно (разные зёрна) и возвращает лучший:
+/// сначала по нерасставленным часам, затем по оценке. Прогресс показывает первый вариант.
+/// При одинаковых зерне и числе потоков результат одинаковый.
+pub fn solve_parallel(school: &School, opts: &SolveOptions, threads: usize) -> SolveResult {
+    let n = threads.max(1);
+    if n == 1 {
+        return solve(school, opts);
+    }
+    std::thread::scope(|sc| {
+        let handles: Vec<_> = (0..n)
+            .map(|i| {
+                let mut o = opts.clone();
+                o.seed = opts.seed.wrapping_add(i as u64 * 7919);
+                if i > 0 {
+                    o.progress = None;
+                }
+                sc.spawn(move || solve(school, &o))
+            })
+            .collect();
+        let results: Vec<SolveResult> = handles.into_iter().filter_map(|h| h.join().ok()).collect();
+        let iterations = results.iter().map(|r| r.iterations).sum();
+        let mut best = results.into_iter().min_by_key(|r| (r.unplaced, r.score)).expect("хотя бы один вариант");
+        best.iterations = iterations;
+        best
+    })
 }

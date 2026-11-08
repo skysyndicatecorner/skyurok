@@ -16,13 +16,16 @@ pub mod export;
 pub mod export_docx;
 pub mod export_pdf;
 pub mod grid;
+pub mod history;
 pub mod manual;
 pub mod model;
 pub mod printdoc;
+pub mod qr;
 pub mod rtt;
 pub mod score;
 pub mod solver;
 pub mod substitute;
+pub mod table_import;
 pub mod validate;
 
 pub use model::*;

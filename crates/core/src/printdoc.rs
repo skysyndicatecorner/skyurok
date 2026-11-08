@@ -35,6 +35,9 @@ pub struct PrintOptions {
     /// Только эти классы / учителя (пусто — все).
     pub only_classes: Vec<Id>,
     pub only_teachers: Vec<Id>,
+    /// Печатать причины отсутствия («больничный», «курсы»). По умолчанию нет:
+    /// лист замен висит на виду, а причина — личные сведения.
+    pub reasons: bool,
 }
 
 impl PrintOptions {
@@ -50,6 +53,7 @@ impl PrintOptions {
             to,
             only_classes: vec![],
             only_teachers: vec![],
+            reasons: false,
         }
     }
 }
@@ -96,6 +100,8 @@ pub struct DocPage {
     pub title: String,
     pub subtitle: String,
     pub note: Option<String>,
+    /// Ссылка для QR-кода под заголовком (лист замен → страница на сайте).
+    pub qr: Option<String>,
     pub table: DocTable,
 }
 
@@ -209,8 +215,9 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
             pages.push(DocPage {
                 landscape: false,
                 title: format!("Расписание уроков {} класса", c.name),
-                subtitle: format!("{} уч. · {} {} в неделю", c.students, hours, plural(hours as usize, "урок", "урока", "уроков")),
+                subtitle: format!("{} уч. · {} {} в неделю", c.students, hours, plural(hours, "урок", "урока", "уроков")),
                 note: None,
+                qr: None,
                 table: DocTable { widths, header, rows },
             });
         }
@@ -261,6 +268,7 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
                 title: teacher_label(&ix, t.id, true),
                 subtitle: format!("{} {} в неделю", hours, plural(hours as usize, "урок", "урока", "уроков")),
                 note: None,
+                qr: None,
                 table: DocTable { widths, header, rows },
             });
         }
@@ -302,6 +310,7 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
                 title: format!("Общее расписание — {}", DAY_NAMES_FULL[d].to_lowercase()),
                 subtitle: String::new(),
                 note: None,
+                qr: None,
                 table: DocTable { widths, header, rows },
             });
         }
@@ -312,11 +321,11 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
         let mut date = o.from;
         while date <= o.to {
             let mut reps: Vec<&Replacement> = p.replacements.iter().filter(|r| r.date == date).collect();
-            reps.sort_by_key(|r| (ctx.lesson(r.lesson).map(|l| l.slot.period), r.lesson));
+            reps.sort_by_key(|r| (ctx.rep_lesson(r).map(|l| l.slot.period), r.lesson));
             if !reps.is_empty() {
                 let mut rows = vec![];
                 for r in reps {
-                    let Some(l) = ctx.lesson(r.lesson) else { continue };
+                    let Some(l) = ctx.rep_lesson(r) else { continue };
                     let Some(load) = ix.load(l.load) else { continue };
                     let g = &load.groups[r.group.min(load.groups.len() - 1)];
                     let (now, subj, mark) = match &r.kind {
@@ -369,7 +378,7 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
                             if let Some(ps) = &a.periods {
                                 x.push_str(&format!(" ({} ур.)", ps.iter().map(|p| (p + 1).to_string()).collect::<Vec<_>>().join(",")));
                             }
-                            if !a.reason.is_empty() {
+                            if o.reasons && !a.reason.is_empty() {
                                 x.push_str(&format!(" — {}", a.reason));
                             }
                             x
@@ -383,6 +392,7 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
                     title: format!("Замены на {}", date.format("%d.%m.%Y")),
                     subtitle: day_of(date, 7).map(|d| DAY_NAMES_FULL[d as usize].to_string()).unwrap_or_default(),
                     note: if absent.is_empty() { None } else { Some(format!("Отсутствуют: {}", absent.join("; "))) },
+                    qr: Some(s.settings.public_url.trim().to_string()).filter(|u| !u.is_empty()),
                     table: DocTable {
                         widths: vec![0.5, 0.8, 1.8, 1.8, 1.3, 1.0, 1.6],
                         header: ["Урок", "Класс", "Было", "Стало", "Предмет", "Кабинет", "Примечание"].iter().map(|x| x.to_string()).collect(),
@@ -413,6 +423,7 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
             title: "Табель замен".into(),
             subtitle: format!("{} — {}", o.from.format("%d.%m.%Y"), o.to.format("%d.%m.%Y")),
             note: None,
+            qr: None,
             table: DocTable {
                 widths: vec![3.0, 1.2, 1.2, 1.4],
                 header: ["Учитель", "Провёл замен, ч", "Его уроков заменено", "Подпись"].iter().map(|x| x.to_string()).collect(),
@@ -444,6 +455,7 @@ pub fn build(p: &Project, sections: &[Section], o: &PrintOptions) -> PrintDoc {
             title: "Проблемы в расписании".into(),
             subtitle: "Документ выгружен как черновик: эти проблемы ещё не исправлены".into(),
             note: None,
+            qr: None,
             table: DocTable { widths: vec![0.4, 6.0], header: vec!["№".into(), "Описание".into()], rows },
         });
     }

@@ -67,6 +67,9 @@ pub fn write(doc: &PrintDoc) -> Result<Vec<u8>, String> {
         if let Some(note) = &page.note {
             body.push_str(&para(note, false, 20, "left", None, 120));
         }
+        if let Some(url) = &page.qr {
+            body.push_str(&para(&format!("Замены на телефоне: {url}"), false, 20, "left", Some("0A58CA"), 120));
+        }
         // таблица
         let t = &page.table;
         let total: f32 = t.widths.iter().sum();

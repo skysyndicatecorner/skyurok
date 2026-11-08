@@ -24,7 +24,7 @@ jobs:
     name: Тесты
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Системные библиотеки
@@ -41,7 +41,7 @@ jobs:
       # Минимальная glibc: Astra Linux 1.7, РЕД ОС 7.3, Альт 10, Debian 10 и новее.
       GLIBC: "2.28"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-gnu
@@ -61,6 +61,8 @@ jobs:
               echo "::error::$b требует glibc $need — новее, чем $GLIBC"; exit 1
             fi
           done
+      - name: Замер генератора на контрольных школах
+        run: target/$TRIPLE/release/skyurok bench --sizes 1,2,3 --seconds 20 --markdown >> "$GITHUB_STEP_SUMMARY"
       - name: Упаковка
         run: |
           mkdir -p dist pkg/SkyUrok
@@ -73,6 +75,22 @@ jobs:
           cargo deb -p skyurok-app --no-build --no-strip --target $TRIPLE -o dist/
           cargo generate-rpm -p crates/app --target $TRIPLE -o dist/
           ls -la dist
+      - name: Проверка пакетов
+        run: |
+          set -e
+          # архив: программа на месте и консольная утилита запускается и печатает PDF
+          mkdir -p /tmp/t && tar xzf dist/SkyUrok-linux-x86_64.tar.gz -C /tmp/t
+          test -x /tmp/t/SkyUrok/skyurok-app
+          /tmp/t/SkyUrok/skyurok doc /tmp/t/SkyUrok/demo-school.json /tmp/t/check.pdf --what classes
+          test -s /tmp/t/check.pdf
+          # .deb: бинарники, ярлык, значок
+          dpkg-deb -c dist/*.deb | tee /tmp/deb.txt
+          for f in usr/bin/skyurok-app usr/bin/skyurok usr/share/applications/skyurok.desktop usr/share/icons/hicolor/256x256/apps/skyurok.png; do
+            grep -q "$f" /tmp/deb.txt || { echo "::error::в .deb нет $f"; exit 1; }
+          done
+          # .rpm: не пустой
+          test "$(stat -c %s dist/*.rpm)" -gt 1000000
+          echo "Пакеты в порядке"
       - uses: actions/upload-artifact@v4
         with:
           name: linux
@@ -83,7 +101,7 @@ jobs:
     needs: test
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - name: Тесты ядра
@@ -94,10 +112,28 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist, pkg/SkyUrok | Out-Null
+          # В Windows имена файлов не различают регистр: SkyUrok.exe и skyurok.exe —
+          # один и тот же файл. Поэтому консольная утилита называется skyurok-cli.exe.
           Copy-Item target/release/skyurok-app.exe pkg/SkyUrok/SkyUrok.exe
-          Copy-Item target/release/skyurok.exe pkg/SkyUrok/skyurok.exe
+          Copy-Item target/release/skyurok.exe pkg/SkyUrok/skyurok-cli.exe
           Copy-Item README.md, LICENSE, examples/demo-school.json pkg/SkyUrok/
           Compress-Archive -Path pkg/SkyUrok -DestinationPath dist/SkyUrok-windows-x64.zip
+      - name: Проверка архива
+        shell: pwsh
+        run: |
+          # SkyUrok.exe должен быть оконной программой (подсистема 2), а не консольной (3).
+          $b = [IO.File]::ReadAllBytes("pkg/SkyUrok/SkyUrok.exe")
+          $pe = [BitConverter]::ToInt32($b, 0x3C)
+          $sub = [BitConverter]::ToUInt16($b, $pe + 0x5C)
+          if ($sub -ne 2) { Write-Error "SkyUrok.exe не оконная программа (подсистема $sub)"; exit 1 }
+          if (-not (Test-Path pkg/SkyUrok/skyurok-cli.exe)) { Write-Error "Нет skyurok-cli.exe"; exit 1 }
+          # Без Visual C++ Redistributable программа не запустится, если зависит от VCRUNTIME140.dll.
+          $text = [Text.Encoding]::ASCII.GetString($b)
+          if ($text -match "(?i)vcruntime140\.dll") { Write-Error "SkyUrok.exe зависит от VCRUNTIME140.dll"; exit 1 }
+          # Консольная утилита из архива запускается на Windows и печатает PDF.
+          & pkg/SkyUrok/skyurok-cli.exe doc pkg/SkyUrok/demo-school.json check.pdf --what classes
+          if ($LASTEXITCODE -ne 0 -or -not (Test-Path check.pdf)) { Write-Error "skyurok-cli.exe не запустился"; exit 1 }
+          Write-Host "Архив в порядке"
       - uses: actions/upload-artifact@v4
         with:
           name: windows
@@ -110,20 +146,26 @@ jobs:
     env:
       NDK_VERSION: 26.3.11579264
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android,armv7-linux-androideabi
       - uses: Swatinem/rust-cache@v2
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "17"
-      - uses: android-actions/setup-android@v3
       - name: SDK и NDK
         run: |
-          sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;${NDK_VERSION}"
-          echo "ANDROID_NDK_ROOT=${ANDROID_SDK_ROOT}/ndk/${NDK_VERSION}" >> $GITHUB_ENV
+          # Android SDK уже установлен на серверах GitHub; доставляем нужные части.
+          SDK="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SM" --licenses > /dev/null || true
+          "$SM" --install "platform-tools" "platforms;android-34" "build-tools;34.0.0" "ndk;${NDK_VERSION}"
+          echo "ANDROID_HOME=$SDK" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$SDK" >> $GITHUB_ENV
+          echo "ANDROID_NDK_ROOT=$SDK/ndk/${NDK_VERSION}" >> $GITHUB_ENV
+          ls "$SDK/ndk/${NDK_VERSION}" > /dev/null
       - name: cargo-apk
         run: cargo install --locked cargo-apk
       - name: Ключ подписи
@@ -148,6 +190,13 @@ jobs:
           cargo apk build --release -p skyurok-app --lib
           mkdir -p dist
           cp target/release/apk/*.apk dist/SkyUrok-android.apk
+      - name: Проверка APK
+        run: |
+          set -e
+          test "$(stat -c %s dist/SkyUrok-android.apk)" -gt 3000000
+          "$ANDROID_HOME/build-tools/34.0.0/aapt2" dump badging dist/SkyUrok-android.apk | tee /tmp/badging.txt | head -5
+          grep -q "package: name='ru.skyurok.app'" /tmp/badging.txt
+          grep -q "lib/arm64-v8a/" <(unzip -l dist/SkyUrok-android.apk) || { echo "::error::в APK нет библиотеки для arm64"; exit 1; }
       - uses: actions/upload-artifact@v4
         with:
           name: android
@@ -161,7 +210,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - name: Тег совпадает с версией в коде
+        run: |
+          V=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          if [ "v$V" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Тег $GITHUB_REF_NAME не совпадает с версией v$V в Cargo.toml. Удалите тег и создайте v$V на последнем коммите."
+            exit 1
+          fi
       - uses: actions/download-artifact@v4
         with:
           path: artifacts

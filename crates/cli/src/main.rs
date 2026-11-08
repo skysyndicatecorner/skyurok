@@ -35,6 +35,32 @@ enum Cmd {
         seconds: u64,
         #[arg(long, default_value_t = 1)]
         seed: u64,
+        /// Сколько вариантов считать параллельно (0 — по числу ядер, не больше 4).
+        #[arg(long, default_value_t = 0)]
+        threads: usize,
+    },
+    /// Страница замен для телефона (HTML) на сегодня и следующие учебные дни.
+    Phone {
+        project: PathBuf,
+        out: PathBuf,
+        /// С какой даты (ГГГГ-ММ-ДД), по умолчанию — сегодня.
+        #[arg(long)]
+        from: Option<NaiveDate>,
+        #[arg(long, default_value_t = 2)]
+        days: usize,
+    },
+    /// Замер генератора на контрольных школах: 13, 26, 39… классов.
+    Bench {
+        /// Размеры в копиях демо-школы (1 копия = 13 классов), через запятую.
+        #[arg(long, default_value = "1,2,3,4")]
+        sizes: String,
+        #[arg(long, default_value_t = 20)]
+        seconds: u64,
+        #[arg(long, default_value_t = 0)]
+        threads: usize,
+        /// Вывод таблицей Markdown (для отчёта сборки на GitHub).
+        #[arg(long)]
+        markdown: bool,
     },
     /// Проверить исходные данные, расписание и замены.
     Check { project: PathBuf },
@@ -135,7 +161,58 @@ fn print_report(pr: &Project) {
     }
 }
 
-fn do_solve(pr: &mut Project, seconds: u64, seed: u64) {
+fn threads_or_default(t: usize) -> usize {
+    if t == 0 {
+        solver::default_threads()
+    } else {
+        t
+    }
+}
+
+fn do_bench(sizes: &str, seconds: u64, threads: usize, markdown: bool) {
+    let threads = threads_or_default(threads);
+    if markdown {
+        println!("### Замер генератора ({threads} потока, лимит {seconds} с)\n");
+        println!("| Классов | Учителей | Уроков | Время, с | Конфликты | Не расставлено | Оценка |");
+        println!("|---:|---:|---:|---:|---:|---:|---:|");
+    } else {
+        println!("Потоков: {threads}, лимит: {seconds} с");
+        println!("{:>8} {:>9} {:>7} {:>9} {:>10} {:>14} {:>8}", "классов", "учителей", "уроков", "время, с", "конфликты", "не расставлено", "оценка");
+    }
+    for k in sizes.split(',').filter_map(|x| x.trim().parse::<usize>().ok()).filter(|k| *k > 0) {
+        let school = demo::scaled_school(k);
+        let opts = solver::SolveOptions { seed: 1, max_iterations: u64::MAX / 2, time_limit: Duration::from_secs(seconds), ..Default::default() };
+        let res = solver::solve_parallel(&school, &opts, threads);
+        let rep = analyze(&school, &res.timetable);
+        let hard = rep.issues.iter().filter(|i| i.severity == Severity::Error && i.code != "unplaced").count();
+        let hours: u32 = school.loads.iter().map(|l| l.hours_per_week as u32).sum();
+        if markdown {
+            println!(
+                "| {} | {} | {} | {:.1} | {} | {} | {} |",
+                school.classes.len(),
+                school.teachers.len(),
+                hours,
+                res.elapsed.as_secs_f64(),
+                hard,
+                res.unplaced,
+                res.score
+            );
+        } else {
+            println!(
+                "{:>8} {:>9} {:>7} {:>9.1} {:>10} {:>14} {:>8}",
+                school.classes.len(),
+                school.teachers.len(),
+                hours,
+                res.elapsed.as_secs_f64(),
+                hard,
+                res.unplaced,
+                res.score
+            );
+        }
+    }
+}
+
+fn do_solve(pr: &mut Project, seconds: u64, seed: u64, threads: usize) {
     let opts = solver::SolveOptions {
         seed,
         max_iterations: 3_000_000,
@@ -143,7 +220,7 @@ fn do_solve(pr: &mut Project, seconds: u64, seed: u64) {
         keep_pinned_from: Some(pr.timetable.clone()),
         ..Default::default()
     };
-    let res = solver::solve(&pr.school, &opts);
+    let res = solver::solve_parallel(&pr.school, &opts, threads_or_default(threads));
     println!(
         "Генерация: {} уроков, нерасставлено {}, оценка {}, итераций {}, {:.1} с",
         res.timetable.lessons.len(),
@@ -152,7 +229,12 @@ fn do_solve(pr: &mut Project, seconds: u64, seed: u64) {
         res.iterations,
         res.elapsed.as_secs_f64()
     );
-    pr.timetable = res.timetable;
+    let today = chrono::Local::now().date_naive();
+    let stamp = chrono::Local::now().format("%Y-%m-%d %H:%M").to_string();
+    let rep = history::apply_timetable(pr, res.timetable, today, &stamp, &format!("Перед составлением {stamp}"));
+    if rep.touched() > 0 {
+        println!("Замены: перенесено с пометкой «пересмотреть» {}, удалено {}", rep.shifted, rep.removed);
+    }
 }
 
 fn do_export(pr: &Project, out: &Path, from: NaiveDate, to: NaiveDate) {
@@ -189,7 +271,7 @@ fn main() {
             for i in precheck(&pr.school) {
                 println!("[{:?}] {}", i.severity, i.message);
             }
-            do_solve(&mut pr, seconds, seed);
+            do_solve(&mut pr, seconds, seed, 0);
             // Отсутствия: математик на два дня, англичанка — первые три урока.
             let ix = Index::new(&pr.school);
             let math = pr
@@ -218,9 +300,9 @@ fn main() {
             print_report(&pr);
             do_export(&pr, &out.join("печать"), tue, wed);
         }
-        Cmd::Solve { project, out, seconds, seed } => {
+        Cmd::Solve { project, out, seconds, seed, threads } => {
             let mut pr = load(&project);
-            do_solve(&mut pr, seconds, seed);
+            do_solve(&mut pr, seconds, seed, threads);
             save(out.as_deref().unwrap_or(&project), &pr);
             print_report(&pr);
         }
@@ -286,6 +368,15 @@ fn main() {
             let pr = load(&project);
             let (f, t) = range_of(&pr);
             do_export(&pr, &out, from.unwrap_or(f), to.unwrap_or(t));
+        }
+        Cmd::Bench { sizes, seconds, threads, markdown } => do_bench(&sizes, seconds, threads, markdown),
+        Cmd::Phone { project, out, from, days } => {
+            let pr = load(&project);
+            let from = from.unwrap_or_else(|| chrono::Local::now().date_naive());
+            let stamp = chrono::Local::now().format("%d.%m.%Y %H:%M").to_string();
+            let html = export::html_phone(&pr, from, days, &stamp);
+            std::fs::write(&out, html).unwrap_or_else(|e| die(&format!("{}: {e}", out.display())));
+            println!("Сохранено: {}", out.display());
         }
         Cmd::Doc { project, out, what, draft, from, to } => {
             use skyurok_core::printdoc::{build, problems, PrintOptions, Section};

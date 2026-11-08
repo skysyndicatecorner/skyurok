@@ -411,3 +411,71 @@ pub fn demo_school() -> School {
     }
     School { name: "МБОУ «Демо-школа №1» (два корпуса)".into(), settings, buildings, rooms, subjects, teachers, classes, loads }
 }
+
+/// Контрольная школа для замеров: демо-школа, повторённая `k` раз (13·k классов).
+/// Классы, учителя и обычные кабинеты у каждой копии свои, а спецкабинеты
+/// (спортзал, лаборатории — кабинеты с метками) — один комплект на две копии.
+/// Так копии конкурируют за общие помещения, как в настоящей школе, но задача
+/// остаётся решаемой (проверяется `precheck`).
+pub fn scaled_school(k: usize) -> School {
+    let base = demo_school();
+    if k <= 1 {
+        return base;
+    }
+    let mx = |v: &[Id]| v.iter().copied().max().unwrap_or(0);
+    let (tn, cn, rn, ln) = (
+        mx(&base.teachers.iter().map(|x| x.id).collect::<Vec<_>>()),
+        mx(&base.classes.iter().map(|x| x.id).collect::<Vec<_>>()),
+        mx(&base.rooms.iter().map(|x| x.id).collect::<Vec<_>>()),
+        mx(&base.loads.iter().map(|x| x.id).collect::<Vec<_>>()),
+    );
+    let shared: std::collections::HashSet<Id> = base.rooms.iter().filter(|r| !r.tags.is_empty()).map(|r| r.id).collect();
+    let letters = ["а", "б", "в", "г", "д", "е"];
+    let mut s = base.clone();
+    s.name = format!("Контрольная школа на {} классов", base.classes.len() * k);
+    for c in 1..k {
+        let off = c as Id;
+        // Спецкабинеты: один комплект на каждые две копии (как в школе вдвое больше — вдвое больше залов).
+        let pair = (c / 2) as Id;
+        let room = |id: Id| if shared.contains(&id) { id + pair * k as Id * rn } else { id + off * rn };
+        if c % 2 == 0 {
+            for r in base.rooms.iter().filter(|r| shared.contains(&r.id)) {
+                let mut r = r.clone();
+                r.id += pair * k as Id * rn;
+                r.name = format!("{} ({})", r.name, pair + 1);
+                s.rooms.push(r);
+            }
+        }
+        for t in &base.teachers {
+            let mut t = t.clone();
+            t.id += off * tn;
+            t.last_name = format!("{}-{}", t.last_name, c + 1);
+            t.home_room = t.home_room.map(room);
+            s.teachers.push(t);
+        }
+        for cl in &base.classes {
+            let mut cl = cl.clone();
+            cl.id += off * cn;
+            let digits: String = cl.name.chars().take_while(|ch| ch.is_ascii_digit()).collect();
+            cl.name = format!("{digits}{}", letters[c.min(letters.len() - 1)]);
+            s.classes.push(cl);
+        }
+        for r in base.rooms.iter().filter(|r| !shared.contains(&r.id)) {
+            let mut r = r.clone();
+            r.id += off * rn;
+            r.name = format!("{}-{}", r.name, c + 1);
+            s.rooms.push(r);
+        }
+        for l in &base.loads {
+            let mut l = l.clone();
+            l.id += off * ln;
+            l.classes = l.classes.iter().map(|x| x + off * cn).collect();
+            for g in &mut l.groups {
+                g.teacher += off * tn;
+                g.rooms = g.rooms.iter().map(|x| room(*x)).collect();
+            }
+            s.loads.push(l);
+        }
+    }
+    s
+}

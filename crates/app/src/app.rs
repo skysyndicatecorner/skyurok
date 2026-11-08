@@ -58,6 +58,12 @@ pub struct SkyApp {
     pub onboarding: onboarding::State,
     pub palette: palette::State,
     pub onboarding_seen: bool,
+    /// Файл открыт только для чтения: его держит другой компьютер.
+    pub read_only: bool,
+    lock_conflict: Option<(PathBuf, fileio::LockInfo, Box<Project>)>,
+    loaded_mtime: Option<std::time::SystemTime>,
+    overwrite_confirm: Option<PathBuf>,
+    backups_open: bool,
 }
 
 pub fn empty_school() -> School {
@@ -138,6 +144,11 @@ impl SkyApp {
             onboarding: Default::default(),
             palette: Default::default(),
             onboarding_seen,
+            read_only: false,
+            lock_conflict: None,
+            loaded_mtime: None,
+            overwrite_confirm: None,
+            backups_open: false,
         };
         let arg = std::env::args().nth(1).map(PathBuf::from).filter(|p| p.exists());
         if let Some(p) = arg {
@@ -172,6 +183,13 @@ impl SkyApp {
         if std::env::var("SKYUROK_PALETTE").is_ok() {
             app.palette.open();
         }
+        if std::env::var("SKYUROK_VERSIONS").is_ok() {
+            app.tt_ui.versions_open = true;
+        }
+        if std::env::var("SKYUROK_SOLVE").is_ok() {
+            app.tab = Tab::Timetable;
+            tab_timetable::start(&mut app, false);
+        }
         if let Ok(s) = std::env::var("SKYUROK_EXPORT") {
             let f = if s == "pdf" { tab_print::Format::Pdf } else { tab_print::Format::Word };
             tab_print::start_export(&mut app, f);
@@ -192,18 +210,23 @@ impl SkyApp {
             self.notify("Идёт составление расписания — изменения заблокированы до окончания", true);
             return;
         }
+        if self.read_only {
+            self.notify("Файл открыт только для чтения. Чтобы вносить изменения, сохраните копию: «Файл → Сохранить как…»", true);
+            return;
+        }
         self.undo.push(self.project.clone());
         if self.undo.len() > 60 {
             self.undo.remove(0);
         }
         self.redo.clear();
         f(&mut self.project);
+        self.project.normalize();
         self.touch();
     }
 
     /// Во время генерации данные менять нельзя: результат посчитан по ним.
     pub fn palette_open(&self) -> bool {
-        self.palette.is_open() || self.onboarding.is_open() || self.confirm.is_some()
+        self.palette.is_open() || self.onboarding.is_open() || self.confirm.is_some() || self.tt_ui.versions_open
     }
 
     pub fn locked(&self) -> bool {
@@ -253,6 +276,13 @@ impl SkyApp {
     // ---------- файлы ----------
 
     fn set_project(&mut self, p: Project, path: Option<PathBuf>) {
+        if let Some(old) = self.path.take() {
+            if !self.read_only {
+                fileio::release_lock(&old);
+            }
+        }
+        self.read_only = false;
+        self.loaded_mtime = path.as_deref().and_then(fileio::mtime);
         self.project = p;
         self.path = path.clone();
         self.dirty = false;
@@ -276,17 +306,31 @@ impl SkyApp {
     pub fn open_path(&mut self, p: PathBuf) {
         match std::fs::read_to_string(&p).map_err(|e| e.to_string()).and_then(|t| Project::load_json(&t)) {
             Ok(pr) => {
-                self.set_project(pr, Some(p.clone()));
-                self.notify(format!("Открыт {}", p.display()), false);
+                if let Some(info) = fileio::foreign_lock(&p) {
+                    self.lock_conflict = Some((p, info, Box::new(pr)));
+                    return;
+                }
+                self.finish_open(pr, p, false);
             }
             Err(e) => self.notify(format!("Не удалось открыть {}: {e}", p.display()), true),
         }
     }
 
+    fn finish_open(&mut self, pr: Project, p: PathBuf, read_only: bool) {
+        self.set_project(pr, Some(p.clone()));
+        self.read_only = read_only;
+        if read_only {
+            self.notify(format!("Открыт только для чтения: {}", p.display()), false);
+        } else {
+            fileio::take_lock(&p);
+            self.notify(format!("Открыт {}", p.display()), false);
+        }
+    }
+
     pub fn save(&mut self) -> bool {
         match self.path.clone() {
-            Some(p) => self.save_to(p),
-            None => self.save_as(),
+            Some(p) if !self.read_only => self.save_to(p),
+            _ => self.save_as(),
         }
     }
 
@@ -299,8 +343,32 @@ impl SkyApp {
     }
 
     fn save_to(&mut self, p: PathBuf) -> bool {
+        // Файл изменили снаружи после открытия (другой компьютер, другая копия программы).
+        let same = self.path.as_ref() == Some(&p);
+        if same && self.overwrite_confirm.is_none() {
+            if let (Some(was), Some(now)) = (self.loaded_mtime, fileio::mtime(&p)) {
+                if now != was {
+                    self.overwrite_confirm = Some(p);
+                    return false;
+                }
+            }
+        }
+        self.overwrite_confirm = None;
+        if let Err(e) = fileio::backup(&p) {
+            self.notify(format!("Не удалось сделать резервную копию: {e}"), true);
+        }
         match fileio::write(&p, &self.project.to_json()) {
             Ok(()) => {
+                if !same {
+                    if let Some(old) = self.path.take() {
+                        if !self.read_only {
+                            fileio::release_lock(&old);
+                        }
+                    }
+                }
+                self.read_only = false;
+                fileio::take_lock(&p);
+                self.loaded_mtime = fileio::mtime(&p);
                 self.path = Some(p.clone());
                 self.dirty = false;
                 self.recent.retain(|x| *x != p);
@@ -418,6 +486,10 @@ impl SkyApp {
                 }
                 if ui.button("Сохранить как…").clicked() {
                     self.save_as();
+                }
+                if ui.add_enabled(self.path.is_some(), egui::Button::new("Резервные копии…")).clicked() {
+                    self.backups_open = true;
+                    ui.close();
                 }
                 ui.separator();
                 if ui.button("Импорт из другой программы (.rtt)…").clicked() {
@@ -552,6 +624,11 @@ impl SkyApp {
             let file = self.path.as_ref().map(|p| p.display().to_string()).unwrap_or_else(|| "не сохранено в файл".into());
             ui.label(theme::small(format!("{}{}", file, if self.dirty { " •" } else { "" })));
             ui.separator();
+            if self.read_only {
+                ui.label(RichText::new("только чтение").color(theme::warn()))
+                    .on_hover_text("Файл открыт на другом компьютере. Чтобы вносить изменения, сохраните копию.");
+                ui.separator();
+            }
             if !self.welcome {
                 let (errs, unpl) = {
                     let r = self.report();
@@ -621,6 +698,9 @@ impl SkyApp {
         onboarding::dialog(self, ctx);
         palette::dialog(self, ctx);
         tab_timetable::result_dialog(self, ctx);
+        tab_timetable::versions_dialog(self, ctx);
+        tab_loads::import_dialogs(self, ctx);
+        self.file_dialogs(ctx);
         tab_print::warning_dialog(self, ctx);
         if let Some(a) = self.confirm.clone() {
             let mut close = false;
@@ -694,6 +774,118 @@ impl SkyApp {
             });
             if resp.should_close() {
                 self.about = false;
+            }
+        }
+    }
+
+    fn file_dialogs(&mut self, ctx: &egui::Context) {
+        if let Some((path, info, _)) = &self.lock_conflict {
+            let (path, info) = (path.clone(), info.clone());
+            let mut choice: Option<u8> = None;
+            egui::Modal::new(egui::Id::unique("lock_conflict")).show(ctx, |ui| {
+                ui.set_width(520.0);
+                ui.heading("Файл уже открыт на другом компьютере");
+                ui.label(format!("{} открыл(а) его на компьютере «{}» в {}.", info.user, info.host, info.since));
+                ui.label(theme::small(
+                    "Если работать с одним файлом вдвоём, кто сохранит позже, тот сотрёт изменения другого. Откройте только для чтения или договоритесь, кто вносит правки.",
+                ));
+                ui.add_space(8.0);
+                ui.horizontal(|ui| {
+                    if ui.add(egui::Button::new(theme::bold("Только для чтения").color(theme::accent_text())).fill(theme::accent())).clicked() {
+                        choice = Some(0);
+                    }
+                    if ui.button("Всё равно открыть").clicked() {
+                        choice = Some(1);
+                    }
+                    if ui.button("Отмена").clicked() {
+                        choice = Some(2);
+                    }
+                });
+            });
+            if let Some(c) = choice {
+                let (_, _, pr) = self.lock_conflict.take().unwrap();
+                match c {
+                    0 => self.finish_open(*pr, path, true),
+                    1 => self.finish_open(*pr, path, false),
+                    _ => {}
+                }
+            }
+        }
+        if let Some(p) = self.overwrite_confirm.clone() {
+            let mut choice: Option<u8> = None;
+            egui::Modal::new(egui::Id::unique("overwrite_confirm")).show(ctx, |ui| {
+                ui.set_width(520.0);
+                ui.heading("Файл изменили после открытия");
+                ui.label("Похоже, его сохранили с другого компьютера или из другой копии программы. Если перезаписать, те изменения пропадут.");
+                ui.label(theme::small("Прежний вариант в любом случае попадёт в резервные копии."));
+                ui.add_space(8.0);
+                ui.horizontal(|ui| {
+                    if ui.button("Сохранить как копию…").clicked() {
+                        choice = Some(0);
+                    }
+                    if ui.button(RichText::new("Перезаписать").color(theme::bad())).clicked() {
+                        choice = Some(1);
+                    }
+                    if ui.button("Отмена").clicked() {
+                        choice = Some(2);
+                    }
+                });
+            });
+            match choice {
+                Some(0) => {
+                    self.overwrite_confirm = None;
+                    self.save_as();
+                }
+                Some(1) => {
+                    self.save_to(p);
+                }
+                Some(_) => self.overwrite_confirm = None,
+                None => {}
+            }
+        }
+        if self.backups_open {
+            let list = self.path.as_deref().map(fileio::backups).unwrap_or_default();
+            let mut restore: Option<PathBuf> = None;
+            let mut close = false;
+            let resp = egui::Modal::new(egui::Id::unique("backups")).show(ctx, |ui| {
+                ui.set_width(520.0);
+                ui.heading("Резервные копии");
+                ui.label(theme::small(format!("Перед каждым сохранением прежний файл копируется сюда. Хранятся последние {}.", fileio::BACKUPS_KEEP)));
+                ui.add_space(6.0);
+                if list.is_empty() {
+                    ui.label(theme::small("Копий пока нет: они появятся после первого сохранения."));
+                }
+                egui::ScrollArea::vertical().max_height(360.0).show(ui, |ui| {
+                    egui::Grid::new("backups_grid").num_columns(3).striped(true).spacing([16.0, 6.0]).show(ui, |ui| {
+                        for (p, label, size) in &list {
+                            ui.label(label);
+                            ui.label(theme::small(format!("{} КБ", size / 1024)));
+                            if ui.small_button("Вернуть").on_hover_text("Загрузить эту копию; отменить можно через Ctrl+Z").clicked()
+                            {
+                                restore = Some(p.clone());
+                            }
+                            ui.end_row();
+                        }
+                    });
+                });
+                ui.add_space(8.0);
+                if ui.button("Закрыть").clicked() {
+                    close = true;
+                }
+            });
+            if let Some(p) = restore {
+                match std::fs::read_to_string(&p).map_err(|e| e.to_string()).and_then(|t| Project::load_json(&t)) {
+                    Ok(pr) => {
+                        self.edit(|cur| *cur = pr);
+                        self.tt_ui.map_cache = None;
+                        self.notify("Резервная копия загружена. Сохраните, чтобы оставить её; Ctrl+Z — отменить", false);
+                        close = true;
+                    }
+                    Err(e) => self.notify(format!("Не удалось прочитать копию: {e}"), true),
+                }
+            }
+            if close || resp.should_close() {
+                self.backups_open = false;
             }
         }
     }
@@ -818,4 +1010,14 @@ fn webbrowser_open(url: &str) -> Result<(), String> {
 #[cfg(target_os = "android")]
 fn webbrowser_open(_url: &str) -> Result<(), String> {
     Err("недоступно на Android".into())
+}
+
+impl Drop for SkyApp {
+    fn drop(&mut self) {
+        if let Some(p) = &self.path {
+            if !self.read_only {
+                fileio::release_lock(p);
+            }
+        }
+    }
 }

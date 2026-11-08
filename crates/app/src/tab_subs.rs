@@ -138,6 +138,25 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
                 print(app, a, b);
                 ui.close();
             }
+            if ui.button("Страница замен для телефона…").on_hover_text("Один HTML-файл на сегодня и следующий учебный день. Выложите его на сайт школы — адрес укажите в разделе «Школа», и на листе замен появится QR-код.").clicked() {
+                let stamp = chrono::Local::now().format("%d.%m.%Y %H:%M").to_string();
+                let html = export::html_phone(&app.project, date, 2, &stamp);
+                if let Some(path) = fileio::pick_save("Страница HTML", &["html"], "zameny.html") {
+                    match fileio::write(&path, &html) {
+                        Ok(()) => {
+                            let _ = fileio::open_external(&path);
+                            let hint = if app.project.school.settings.public_url.trim().is_empty() {
+                                " Укажите её адрес на сайте в разделе «Школа» — на листе замен появится QR-код."
+                            } else {
+                                ""
+                            };
+                            app.notify(format!("Страница сохранена: {}.{hint}", path.display()), false);
+                        }
+                        Err(e) => app.notify(e, true),
+                    }
+                }
+                ui.close();
+            }
             if ui.button("Расписание дня с заменами (для стенда)").clicked() {
                 let html = export::html_day(&app.project, date);
                 open_html(app, &format!("день_{}.html", date), &html);
@@ -407,9 +426,20 @@ fn center(app: &mut SkyApp, ui: &mut egui::Ui) {
                         } else {
                             theme::warn()
                         };
-                        ui.label(RichText::new(format!("{}{}", kind_text(&ix, r, &ctx), if r.confirmed { "" } else { " · черновик" })).color(color));
+                        let color = if r.stale { theme::warn() } else { color };
+                        let tag = if r.confirmed { "" } else { " · черновик" };
+                        let text = if r.stale {
+                            format!("! пересмотреть: {}", kind_text(&ix, r, &ctx))
+                        } else {
+                            format!("{}{tag}", kind_text(&ix, r, &ctx))
+                        };
+                        ui.label(RichText::new(text).color(color)).on_hover_text(if r.stale {
+                            "После пересоставления урок переехал. Проверьте, свободен ли заменяющий, и нажмите ✓"
+                        } else {
+                            ""
+                        });
                         ui.horizontal(|ui| {
-                            if !r.confirmed && ui.small_button("✓").on_hover_text("Подтвердить").clicked() {
+                            if (!r.confirmed || r.stale) && ui.small_button("✓").on_hover_text("Подтвердить").clicked() {
                                 confirm = Some(r.id);
                             }
                             if ui.small_button("✕").on_hover_text("Убрать замену").clicked() {
@@ -486,7 +516,12 @@ fn center(app: &mut SkyApp, ui: &mut egui::Ui) {
         app.edit(|p| p.replacements.retain(|r| r.id != id));
     }
     if let Some(id) = confirm {
-        app.edit(|p| p.replacements.iter_mut().filter(|r| r.id == id).for_each(|r| r.confirmed = true));
+        app.edit(|p| {
+            p.replacements.iter_mut().filter(|r| r.id == id).for_each(|r| {
+                r.confirmed = true;
+                r.stale = false;
+            })
+        });
     }
 }
 
@@ -563,6 +598,8 @@ fn assign(app: &mut SkyApp, a: &AffectedLesson, kind: ReplacementKind, room: Opt
             room: if room == original { None } else { room },
             note,
             confirmed: true,
+            anchor: None,
+            stale: false,
         });
     });
     app.notify("Замена назначена", false);

@@ -3,10 +3,11 @@
 use crate::app::SkyApp;
 use crate::{theme, widgets};
 use eframe::egui::{self, CornerRadius, RichText, Sense, Stroke, StrokeKind, Vec2};
+use skyurok_core::history::{self, RebaseReport};
 use skyurok_core::manual::{self, Planner};
 use skyurok_core::model::*;
 use skyurok_core::solver::{self, SolveOptions, SolveProgress, SolveResult};
-use skyurok_core::validate::{analyze, Report, Severity};
+use skyurok_core::validate::{analyze, precheck, Report, Severity};
 use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -45,6 +46,7 @@ pub struct PendingResult {
     after: Report,
     moved: usize,
     improve: bool,
+    rebase: RebaseReport,
 }
 
 pub struct State {
@@ -57,8 +59,10 @@ pub struct State {
     seconds: u64,
     seed: u64,
     job: Option<Job>,
-    map_cache: Option<((u64, Id, Option<Id>), FeasMap)>,
+    pub(crate) map_cache: Option<((u64, Id, Option<Id>), FeasMap)>,
     pub pending: Option<PendingResult>,
+    pub versions_open: bool,
+    version_name: String,
     cursor: Option<Slot>,
     kb_move: Option<Id>,
     kb_swap: Option<Id>,
@@ -78,6 +82,8 @@ impl Default for State {
             job: None,
             map_cache: None,
             pending: None,
+            versions_open: false,
+            version_name: String::new(),
             cursor: None,
             kb_move: None,
             kb_swap: None,
@@ -153,7 +159,8 @@ pub fn poll(app: &mut SkyApp, ctx: &egui::Context) {
                     let after = analyze(&app.project.school, &res.timetable);
                     let old: HashSet<(Id, Slot)> = app.project.timetable.lessons.iter().map(|l| (l.load, l.slot)).collect();
                     let moved = res.timetable.lessons.iter().filter(|l| !old.contains(&(l.load, l.slot))).count();
-                    app.tt_ui.pending = Some(PendingResult { res, before, after, moved, improve: j.improve });
+                    let (_, rebase) = history::rebase_replacements(&app.project, &res.timetable, today());
+                    app.tt_ui.pending = Some(PendingResult { res, before, after, moved, improve: j.improve, rebase });
                 }
                 app.tt_ui.map_cache = None;
             }
@@ -221,6 +228,29 @@ pub fn result_dialog(app: &mut SkyApp, ctx: &egui::Context) {
                 ui.end_row();
             }
         });
+        let rb = &pr.rebase;
+        if rb.kept + rb.shifted + rb.removed > 0 {
+            ui.add_space(8.0);
+            let warn = rb.touched() > 0;
+            let frame = egui::Frame::new().corner_radius(8.0).inner_margin(10.0).fill(if warn { theme::warn_bg() } else { theme::surface2() });
+            frame.show(ui, |ui| {
+                ui.set_min_width(ui.available_width());
+                ui.label(theme::bold("Назначенные замены на сегодня и дальше"));
+                ui.label(format!("Останутся на своих уроках: {}", rb.kept));
+                if rb.shifted > 0 {
+                    ui.label(
+                        RichText::new(format!("Урок переедет в тот же день — замена перенесётся с пометкой «пересмотреть»: {}", rb.shifted))
+                            .color(theme::warn()),
+                    );
+                }
+                if rb.removed > 0 {
+                    let extra =
+                        if rb.removed_confirmed > 0 { format!(", из них подтверждённых: {}", rb.removed_confirmed) } else { String::new() };
+                    ui.label(RichText::new(format!("Урока в этот день больше не будет — замена удалится: {}{extra}", rb.removed)).color(theme::bad()));
+                }
+                ui.label(theme::small("Прошедшие замены остаются в истории и табеле. Текущее расписание сохранится как версия."));
+            });
+        }
         ui.add_space(10.0);
         ui.horizontal(|ui| {
             if ui.add(egui::Button::new(theme::bold("Применить новый").color(theme::accent_text())).fill(theme::accent())).clicked() {
@@ -236,8 +266,15 @@ pub fn result_dialog(app: &mut SkyApp, ctx: &egui::Context) {
         Some(true) => {
             let pr = app.tt_ui.pending.take().unwrap();
             let unpl = pr.res.unplaced;
-            app.edit(|p| p.timetable = pr.res.timetable);
-            app.notify("Новый вариант применён", unpl > 0);
+            let mut rep = RebaseReport::default();
+            let stamp = now_stamp();
+            app.edit(|p| rep = history::apply_timetable(p, pr.res.timetable, today(), &stamp, &format!("Перед составлением {stamp}")));
+            let msg = if rep.touched() > 0 {
+                format!("Новый вариант применён. Замен перенесено с пометкой «пересмотреть»: {}, удалено: {}", rep.shifted, rep.removed)
+            } else {
+                "Новый вариант применён".to_string()
+            };
+            app.notify(msg, unpl > 0 || rep.touched() > 0);
         }
         Some(false) => {
             app.tt_ui.pending = None;
@@ -261,7 +298,7 @@ fn start_job(app: &mut SkyApp, improve: bool) {
         stop: Some(stop.clone()),
         progress: Some(progress.clone()),
     };
-    let handle = std::thread::spawn(move || solver::solve(&school, &opts));
+    let handle = std::thread::spawn(move || solver::solve_parallel(&school, &opts, solver::default_threads()));
     app.tt_ui.job = Some(Job { handle: Some(handle), stop, progress, started: Instant::now(), improve, limit: app.tt_ui.seconds });
 }
 
@@ -425,6 +462,11 @@ fn toolbar(app: &mut SkyApp, ui: &mut egui::Ui) {
                 }
                 ui.separator();
             }
+            if ui.button(format!("Версии расписания… ({})", app.project.versions.len())).clicked() {
+                app.tt_ui.versions_open = true;
+                ui.close();
+            }
+            ui.separator();
             if ui.button("Закрепить всё расписание").clicked() {
                 app.edit(|p| p.timetable.lessons.iter_mut().for_each(|l| l.pinned = true));
             }
@@ -649,6 +691,31 @@ fn week_grid(app: &mut SkyApp, ui: &mut egui::Ui) {
                 }
                 painter.rect_filled(cell, CornerRadius::same(5), fill);
                 let conflict = lessons.iter().any(|l| bad.contains(&l.id));
+                // Подпись ячейки для программ экранного доступа (NVDA, Orca):
+                // «Вторник, 3 урок: Алгебра, Иванова А.С., каб. 201. Конфликт».
+                {
+                    let mut label = format!("{}, {} урок: ", DAY_NAMES_FULL[d as usize], p + 1);
+                    if lessons.is_empty() {
+                        label.push_str("свободно");
+                        if let Some(m) = &map {
+                            match m.get(&slot) {
+                                Some(Ok(_)) => label.push_str(", можно поставить"),
+                                Some(Err(why)) => label.push_str(&format!(", нельзя: {}", why.join("; "))),
+                                None => {}
+                            }
+                        }
+                    } else {
+                        let text = lessons.iter().map(|l| lesson_lines(&ix, l, view, Some(entity)).replace('\n', ", ")).collect::<Vec<_>>().join("; ");
+                        label.push_str(&text);
+                    }
+                    if conflict {
+                        label.push_str(". Конфликт");
+                    }
+                    if pinned {
+                        label.push_str(". Закреплён");
+                    }
+                    resp.widget_info(|| egui::WidgetInfo::selected(egui::Role::Button, true, selected, &label));
+                }
                 let stroke = if conflict {
                     Stroke::new(2.0, theme::bad())
                 } else if resp.contains_pointer() && drag.is_some() {
@@ -1042,6 +1109,15 @@ fn side(app: &mut SkyApp, ui: &mut egui::Ui) {
                 ui.label(theme::small("Все часы стоят в сетке."));
             } else {
                 ui.label(theme::small("Перетащите в сетку."));
+                // Почему не встало: то, что не помещается в принципе, — до любого составления.
+                let why: Vec<String> = precheck(&app.project.school).into_iter().filter(|i| i.severity == Severity::Error).map(|i| i.message).collect();
+                if !why.is_empty() {
+                    ui.add_space(4.0);
+                    ui.label(RichText::new("Не помещается в принципе:").color(theme::bad()));
+                    for w in why.iter().take(5) {
+                        ui.label(theme::small(format!("•  {w}")));
+                    }
+                }
             }
             for (lid, n) in un.iter().take(60) {
                 let Some(l) = ix.load(*lid) else { continue };
@@ -1101,4 +1177,87 @@ fn side(app: &mut SkyApp, ui: &mut egui::Ui) {
             }
         });
     });
+}
+
+fn today() -> chrono::NaiveDate {
+    chrono::Local::now().date_naive()
+}
+
+fn now_stamp() -> String {
+    chrono::Local::now().format("%Y-%m-%d %H:%M").to_string()
+}
+
+/// Окно «Версии расписания»: сохранить текущее, вернуть или удалить версию.
+pub fn versions_dialog(app: &mut SkyApp, ctx: &egui::Context) {
+    if !app.tt_ui.versions_open {
+        return;
+    }
+    let mut close = false;
+    let mut restore: Option<Id> = None;
+    let mut delete: Option<Id> = None;
+    let mut save = false;
+    let resp = egui::Modal::new(egui::Id::unique("versions")).show(ctx, |ui| {
+        ui.set_width(600.0);
+        ui.heading("Версии расписания");
+        ui.label(theme::small(
+            "Перед каждым составлением и восстановлением текущее расписание сохраняется само (последние 10). Свои версии храните под понятным именем — они не удаляются.",
+        ));
+        ui.add_space(6.0);
+        ui.horizontal(|ui| {
+            ui.add(egui::TextEdit::singleline(&mut app.tt_ui.version_name).hint_text("Например: Утверждено 1 сентября").desired_width(320.0));
+            if ui.add_enabled(!app.tt_ui.version_name.trim().is_empty(), egui::Button::new("Сохранить текущее")).clicked() {
+                save = true;
+            }
+        });
+        ui.add_space(6.0);
+        if app.project.versions.is_empty() {
+            ui.label(theme::small("Сохранённых версий пока нет."));
+        }
+        egui::ScrollArea::vertical().max_height(360.0).show(ui, |ui| {
+            egui::Grid::new("versions_grid").num_columns(4).striped(true).spacing([14.0, 6.0]).show(ui, |ui| {
+                for v in app.project.versions.iter().rev() {
+                    ui.label(if v.auto { RichText::new(&v.name).color(theme::muted()) } else { theme::bold(&v.name) });
+                    ui.label(theme::small(&v.created));
+                    ui.label(theme::small(format!("{} ур.", v.timetable.lessons.len())));
+                    ui.horizontal(|ui| {
+                        if ui.small_button("Вернуть").on_hover_text("Сделать это расписание текущим; текущее сохранится как версия").clicked() {
+                            restore = Some(v.id);
+                        }
+                        if ui.small_button("✕").on_hover_text("Удалить версию").clicked() {
+                            delete = Some(v.id);
+                        }
+                    });
+                    ui.end_row();
+                }
+            });
+        });
+        ui.add_space(8.0);
+        if ui.button("Закрыть").clicked() {
+            close = true;
+        }
+    });
+    if save {
+        let name = app.tt_ui.version_name.trim().to_string();
+        let stamp = now_stamp();
+        app.edit(|p| {
+            history::save_version(p, &name, &stamp, false);
+        });
+        app.tt_ui.version_name.clear();
+        app.notify(format!("Версия «{name}» сохранена"), false);
+    }
+    if let Some(id) = restore {
+        let stamp = now_stamp();
+        let mut rep = None;
+        app.edit(|p| rep = history::restore_version(p, id, today(), &stamp));
+        app.tt_ui.map_cache = None;
+        if let Some(r) = rep {
+            app.notify(format!("Версия возвращена. Замен с пометкой «пересмотреть»: {}, удалено: {}", r.shifted, r.removed), r.touched() > 0);
+        }
+    }
+    if let Some(id) = delete {
+        app.edit(|p| p.versions.retain(|v| v.id != id));
+    }
+    if close || resp.should_close() {
+        app.tt_ui.versions_open = false;
+    }
 }

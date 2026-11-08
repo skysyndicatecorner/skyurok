@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: 2026 skysyndicatecorner
 // SPDX-License-Identifier: AGPL-3.0-or-later
 use crate::app::SkyApp;
-use crate::{theme, widgets};
+use crate::{fileio, theme, widgets};
 use eframe::egui::{self, RichText};
 use skyurok_core::model::*;
+use skyurok_core::table_import::{self, LoadImport};
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -13,6 +14,9 @@ pub struct State {
     selected: Option<Id>,
     draft: Option<(Load, bool)>,
     quick: Quick,
+    /// Прочитанная таблица ждёт выбора «добавить / заменить».
+    import_rows: Option<Vec<Vec<String>>>,
+    import_report: Option<LoadImport>,
 }
 
 #[derive(Default)]
@@ -61,6 +65,41 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
         if widgets::combo_opt(ui, "lf_t", &mut app.loads_ui.filter_teacher, &teachers, "все") {
             app.loads_ui.filter_class = None;
         }
+        ui.menu_button("Excel…", |ui| {
+            if ui.button("Скачать шаблон таблицы нагрузок…").clicked() {
+                ui.close();
+                match table_import::loads_template_xlsx() {
+                    Ok(bytes) => {
+                        if let Some(p) = fileio::pick_save("Таблица Excel", &["xlsx"], "Нагрузки — шаблон.xlsx") {
+                            match std::fs::write(&p, bytes) {
+                                Ok(()) => {
+                                    let _ = fileio::open_external(&p);
+                                    app.notify(format!("Шаблон сохранён: {}", p.display()), false);
+                                }
+                                Err(e) => app.notify(format!("Не удалось сохранить: {e}"), true),
+                            }
+                        }
+                    }
+                    Err(e) => app.notify(e, true),
+                }
+            }
+            if ui.button("Загрузить нагрузки из Excel или CSV…").clicked() {
+                ui.close();
+                if let Some(p) = fileio::pick_open("Таблица", &["xlsx", "xls", "ods", "csv"]) {
+                    let ext = p.extension().map(|e| e.to_string_lossy().to_string()).unwrap_or_default();
+                    match std::fs::read(&p).map_err(|e| e.to_string()).and_then(|b| table_import::read_table(&b, &ext)) {
+                        Ok(rows) => {
+                            if app.project.school.loads.is_empty() {
+                                run_import(app, rows, false);
+                            } else {
+                                app.loads_ui.import_rows = Some(rows);
+                            }
+                        }
+                        Err(e) => app.notify(format!("Не удалось прочитать таблицу: {e}"), true),
+                    }
+                }
+            }
+        });
         if ui.button(theme::bold("+ Нагрузка")).clicked() {
             let id = widgets::next_id(&s.loads, |l| l.id);
             let teacher = app.loads_ui.filter_teacher.or(s.teachers.first().map(|t| t.id)).unwrap_or(0);
@@ -285,7 +324,7 @@ fn editor(app: &mut SkyApp, ui: &mut egui::Ui, classes: &[(Id, String)], teacher
                 }
             }
         });
-        if !is_new && l.groups.len() > 0 {
+        if !is_new && !l.groups.is_empty() {
             ui.label(theme::small("Изменение групп или классов уберёт уже поставленные уроки этой нагрузки из сетки."));
         }
     });
@@ -347,5 +386,100 @@ fn editor(app: &mut SkyApp, ui: &mut egui::Ui, classes: &[(Id, String)], teacher
         app.notify("Копия: выберите классы и нажмите «Добавить»", false);
     } else {
         app.loads_ui.draft = Some((l, is_new));
+    }
+}
+
+fn run_import(app: &mut SkyApp, rows: Vec<Vec<String>>, replace: bool) {
+    let mut result: Result<LoadImport, String> = Err(String::new());
+    app.edit(|p| {
+        let mut school = p.school.clone();
+        result = table_import::import_loads(&mut school, &rows, replace);
+        if result.is_ok() {
+            if replace {
+                p.timetable.lessons.clear();
+                p.replacements.clear();
+            }
+            p.school = school;
+        }
+    });
+    match result {
+        Ok(r) => app.loads_ui.import_report = Some(r),
+        Err(e) if !e.is_empty() => app.notify(format!("Нагрузки не загружены: {e}"), true),
+        Err(_) => {}
+    }
+}
+
+/// Окна загрузки нагрузок: выбор «добавить / заменить» и итог.
+pub fn import_dialogs(app: &mut SkyApp, ctx: &egui::Context) {
+    if app.loads_ui.import_rows.is_some() {
+        let mut choice: Option<u8> = None;
+        let n = app.project.school.loads.len();
+        egui::Modal::new(egui::Id::unique("loads_import_mode")).show(ctx, |ui| {
+            ui.set_width(480.0);
+            ui.heading("Нагрузки уже есть");
+            ui.label(format!("В школе {n} нагрузок. Что сделать с таблицей?"));
+            ui.add_space(8.0);
+            ui.horizontal(|ui| {
+                if ui.add(egui::Button::new(theme::bold("Добавить к существующим").color(theme::accent_text())).fill(theme::accent())).clicked()
+                {
+                    choice = Some(0);
+                }
+                if ui
+                    .button(RichText::new("Заменить все").color(theme::bad()))
+                    .on_hover_text("Удалит все нагрузки, расписание и замены. Отменить — Ctrl+Z")
+                    .clicked()
+                {
+                    choice = Some(1);
+                }
+                if ui.button("Отмена").clicked() {
+                    choice = Some(2);
+                }
+            });
+        });
+        if let Some(c) = choice {
+            let rows = app.loads_ui.import_rows.take().unwrap();
+            if c < 2 {
+                run_import(app, rows, c == 1);
+            }
+        }
+    }
+    if let Some(r) = app.loads_ui.import_report.clone() {
+        let mut close = false;
+        let resp = egui::Modal::new(egui::Id::unique("loads_import_report")).show(ctx, |ui| {
+            ui.set_width(560.0);
+            ui.heading("Нагрузки загружены");
+            ui.label(format!("Добавлено нагрузок: {} · часов в неделю: {}", r.loads, r.hours));
+            let list = |ui: &mut egui::Ui, title: &str, v: &[String]| {
+                if !v.is_empty() {
+                    ui.label(theme::bold(format!("{title} ({})", v.len())));
+                    ui.label(theme::small(v.join(", ")));
+                }
+            };
+            list(ui, "Новые классы", &r.new_classes);
+            list(ui, "Новые предметы", &r.new_subjects);
+            list(ui, "Новые учителя", &r.new_teachers);
+            if !r.new_teachers.is_empty() || !r.new_classes.is_empty() {
+                ui.label(theme::small("Проверьте их в разделе «Списки»: здание, график, число учеников."));
+            }
+            if !r.warnings.is_empty() {
+                ui.add_space(6.0);
+                ui.label(RichText::new(format!("Замечания ({})", r.warnings.len())).color(theme::warn()));
+                egui::ScrollArea::vertical().max_height(180.0).show(ui, |ui| {
+                    for w in &r.warnings {
+                        ui.label(theme::small(format!("•  {w}")));
+                    }
+                });
+            }
+            ui.add_space(8.0);
+            ui.horizontal(|ui| {
+                if ui.button("Готово").clicked() {
+                    close = true;
+                }
+                ui.label(theme::small("Отменить загрузку — Ctrl+Z"));
+            });
+        });
+        if close || resp.should_close() {
+            app.loads_ui.import_report = None;
+        }
     }
 }

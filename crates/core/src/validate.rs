@@ -106,6 +106,30 @@ pub fn precheck(school: &School) -> Vec<Issue> {
             out.push(err("teacher_hours", format!("Учитель {} может работать {avail} ч при нагрузке {h} ч", t.short_name())));
         }
     }
+    // Кабинет, который у группы единственный допустимый: часы не должны превышать
+    // ёмкость кабинета (доступные уроки недели × сколько групп вмещает одновременно).
+    let mut room_hours: HashMap<Id, u32> = HashMap::new();
+    for l in &school.loads {
+        for g in &l.groups {
+            if let [only] = g.rooms.as_slice() {
+                *room_hours.entry(*only).or_default() += l.hours_per_week as u32;
+            }
+        }
+    }
+    for r in &school.rooms {
+        let h = room_hours.get(&r.id).copied().unwrap_or(0);
+        let cap = cells(&r.availability) as u32 * r.parallel_groups.max(1) as u32;
+        if h > cap {
+            out.push(err(
+                "room_hours",
+                format!(
+                    "Кабинет «{}»: нужно {h} ч в неделю, а помещается {cap}. Не встанут как минимум {} ч — добавьте кабинет или разрешите группам другие кабинеты",
+                    r.name,
+                    h - cap
+                ),
+            ));
+        }
+    }
     out
 }
 

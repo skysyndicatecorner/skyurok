@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: 2026 skysyndicatecorner
 // SPDX-License-Identifier: AGPL-3.0-or-later
 use crate::app::{default_bells, SkyApp};
-use crate::{theme, widgets};
+use crate::{fileio, theme, widgets};
 use eframe::egui::{self, RichText};
 use skyurok_core::model::*;
+use skyurok_core::table_import;
 
 #[derive(Default)]
 pub struct State {
@@ -27,6 +28,7 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
     let changed = d != current;
     let mut apply = false;
     let mut reset = false;
+    let mut hygiene_action: Option<bool> = None;
 
     ui.horizontal(|ui| {
         widgets::heading(ui, "Школа");
@@ -57,6 +59,10 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
                     ui.label("Уроков в день (максимум)");
                     ui.add(egui::DragValue::new(&mut d.settings.periods_per_day).range(1..=16));
                     ui.end_row();
+                    ui.label("Страница замен на сайте");
+                    ui.add(egui::TextEdit::singleline(&mut d.settings.public_url).hint_text("https://школа.рф/zameny.html").desired_width(320.0))
+                        .on_hover_text("Куда вы выкладываете страницу замен для телефона. По этому адресу на листе замен печатается QR-код.");
+                    ui.end_row();
                 });
                 ui.checkbox(&mut d.settings.break_enough_for_building_change, "Перемены хватает, чтобы перейти в другое здание");
                 ui.checkbox(&mut d.settings.classes_may_start_later, "Классы могут приходить не к первому уроку (не считать окном)");
@@ -64,7 +70,15 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
             ui.add_space(8.0);
             widgets::card(ui, |ui| {
                 ui.label(theme::bold("Гигиенические требования"));
-                ui.label(theme::small("Нормы меняются, поэтому профиль настраивается. Сверьте с действующим СанПиН 1.2.3685-21."));
+                ui.label(theme::small("Нормы меняются, поэтому профиль настраивается. СанПиН 1.2.3685-21 действует до 1 марта 2027 года — когда выйдут новые нормы, загрузите обновлённые баллы трудности."));
+                ui.horizontal(|ui| {
+                    if ui.button("Выгрузить баллы трудности…").on_hover_text("Таблица CSV: предмет и баллы для 1–4, 5–9 и 10–11 классов").clicked() {
+                        hygiene_action = Some(true);
+                    }
+                    if ui.button("Загрузить баллы трудности…").on_hover_text("Из такой же таблицы CSV или Excel").clicked() {
+                        hygiene_action = Some(false);
+                    }
+                });
                 ui.horizontal(|ui| {
                     ui.label("Название профиля");
                     ui.text_edit_singleline(&mut d.settings.hygiene.name);
@@ -163,11 +177,10 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
                         });
                     }
                     egui::CollapsingHeader::new(format!("Звонки ({} ур.)", b.bells.len())).id_salt(("bells", b.id)).show(ui, |ui| {
-                        if b.bells.len() < periods as usize {
-                            if ui.small_button("Заполнить по умолчанию").clicked() {
+                        if b.bells.len() < periods as usize
+                            && ui.small_button("Заполнить по умолчанию").clicked() {
                                 b.bells = default_bells(periods);
                             }
-                        }
                         egui::Grid::new(("bellgrid", b.id)).num_columns(3).show(ui, |ui| {
                             for bell in b.bells.iter_mut().filter(|x| x.period < periods) {
                                 ui.label(format!("{} урок", bell.period + 1));
@@ -229,6 +242,41 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
         app.school_ui.draft = None;
     } else {
         app.school_ui.draft = Some(d);
+    }
+    match hygiene_action {
+        Some(true) => {
+            let csv = table_import::difficulty_csv(&app.project.school);
+            if let Some(p) = fileio::pick_save("Таблица CSV", &["csv"], "Баллы трудности.csv") {
+                match fileio::write(&p, &csv) {
+                    Ok(()) => app.notify(format!("Баллы трудности выгружены: {}", p.display()), false),
+                    Err(e) => app.notify(e, true),
+                }
+            }
+        }
+        Some(false) => {
+            if let Some(p) = fileio::pick_open("Таблица", &["csv", "xlsx", "xls", "ods"]) {
+                let ext = p.extension().map(|e| e.to_string_lossy().to_string()).unwrap_or_default();
+                match std::fs::read(&p).map_err(|e| e.to_string()).and_then(|b| table_import::read_table(&b, &ext)) {
+                    Ok(rows) => {
+                        let mut school = app.project.school.clone();
+                        match table_import::apply_difficulty(&mut school, &rows) {
+                            Ok((n, warnings)) => {
+                                app.edit(|pr| pr.school.subjects = school.subjects);
+                                let extra = if warnings.is_empty() {
+                                    String::new()
+                                } else {
+                                    format!(". Пропущено строк: {} ({})", warnings.len(), warnings[0])
+                                };
+                                app.notify(format!("Баллы трудности обновлены у {n} предметов{extra}"), !warnings.is_empty());
+                            }
+                            Err(e) => app.notify(format!("Баллы не загружены: {e}"), true),
+                        }
+                    }
+                    Err(e) => app.notify(format!("Не удалось прочитать таблицу: {e}"), true),
+                }
+            }
+        }
+        None => {}
     }
 }
 

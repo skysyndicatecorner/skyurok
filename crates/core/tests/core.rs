@@ -134,6 +134,8 @@ fn double_booking_in_replacements_is_detected() {
         room: None,
         note: String::new(),
         confirmed: true,
+        anchor: None,
+        stale: false,
     };
     let issues = check_replacements(&ctx, &[r.clone(), Replacement { id: 2, ..r }]);
     let codes: Vec<&str> = issues.iter().map(|i| i.code).collect();
@@ -216,4 +218,203 @@ fn class_absence_frees_teacher_and_skips_lessons() {
     p.absences.push(Absence { id: 1, teacher, from: date, to: date, reason: String::new(), periods: None });
     let ctx = SubContext::new(&p.school, &p.timetable, &p.absences).with_classes(&p.class_absences);
     assert!(ctx.affected(date, date).iter().all(|a| a.lesson_id != l.id));
+}
+
+/// Проект с автоподобранными заменами на неделю для одного отсутствующего учителя.
+fn with_replacements() -> (Project, NaiveDate) {
+    let mut p = solved();
+    let t = p.school.teachers[0].id;
+    let from = first_school_day(&p, t);
+    let to = from + chrono::Days::new(4);
+    p.absences.push(Absence { id: 1, teacher: t, from, to, reason: String::new(), periods: None });
+    let ctx = SubContext::new(&p.school, &p.timetable, &p.absences).with_classes(&p.class_absences);
+    let mut next = 1;
+    let plan = auto_plan(&ctx, &[], from, to, &SubPolicy::standard(), &mut next);
+    assert!(!plan.replacements.is_empty());
+    p.replacements = plan.replacements;
+    p.normalize();
+    (p, from)
+}
+
+fn broken_links(p: &Project) -> Vec<String> {
+    let ctx = SubContext::new(&p.school, &p.timetable, &p.absences).with_classes(&p.class_absences);
+    check_replacements(&ctx, &p.replacements).into_iter().filter(|i| i.code == "rep_bad_lesson" || i.code == "rep_wrong_day").map(|i| i.message).collect()
+}
+
+#[test]
+fn resolving_keeps_replacements_attached() {
+    let (mut p, from) = with_replacements();
+    assert!(p.replacements.iter().all(|r| r.anchor.is_some()));
+    let n = p.replacements.len();
+    let other = solver::solve(&p.school, &solver::SolveOptions { seed: 99, max_iterations: 100_000, time_limit: Duration::from_secs(5), ..Default::default() });
+    // Без переноса замены «отрываются» от уроков — так было в 1.0.
+    let mut naive = p.clone();
+    naive.timetable = other.timetable.clone();
+    assert!(!broken_links(&naive).is_empty(), "ожидали, что без переноса замены сломаются");
+    // С переносом — ни одной оторванной замены.
+    let today = from - chrono::Days::new(1);
+    let rep = history::apply_timetable(&mut p, other.timetable, today, "2026-11-08 12:00", "тест");
+    assert_eq!(rep.kept + rep.shifted + rep.removed + rep.archived, n);
+    assert_eq!(rep.archived, 0);
+    assert!(broken_links(&p).is_empty(), "{:?}", broken_links(&p));
+    assert_eq!(p.replacements.iter().filter(|r| r.stale).count(), rep.shifted);
+    assert_eq!(p.versions.len(), 1, "старое расписание сохранено как версия");
+}
+
+#[test]
+fn past_replacements_stay_in_history_and_print() {
+    let (mut p, from) = with_replacements();
+    let n = p.replacements.len();
+    let other = solver::solve(&p.school, &solver::SolveOptions { seed: 7, max_iterations: 100_000, time_limit: Duration::from_secs(5), ..Default::default() });
+    let today = from + chrono::Days::new(30);
+    let rep = history::apply_timetable(&mut p, other.timetable, today, "2026-11-08 12:00", "тест");
+    assert_eq!(rep.removed, 0);
+    assert_eq!(p.replacements.len(), n, "история не теряется");
+    assert!(broken_links(&p).is_empty());
+    let html = export::html_replacements(&p, from, from + chrono::Days::new(4));
+    let rows = html.matches("<tr class=").count();
+    assert_eq!(rows, n, "все замены из истории попадают в лист");
+}
+
+#[test]
+fn versions_restore_and_auto_limit() {
+    let (mut p, from) = with_replacements();
+    let original = p.timetable.clone();
+    let vid = history::save_version(&mut p, "Утверждённое", "2026-09-01 09:00", false);
+    for i in 0..15 {
+        let r =
+            solver::solve(&p.school, &solver::SolveOptions { seed: 100 + i, max_iterations: 2_000, time_limit: Duration::from_secs(5), ..Default::default() });
+        history::apply_timetable(&mut p, r.timetable, from, "2026-11-08 12:00", "авто");
+    }
+    assert_eq!(p.versions.iter().filter(|v| v.auto).count(), history::AUTO_VERSIONS_KEEP);
+    assert!(p.versions.iter().any(|v| v.id == vid), "ручная версия не удаляется");
+    history::restore_version(&mut p, vid, from, "2026-11-08 13:00").unwrap();
+    assert_eq!(p.timetable, original);
+    assert!(broken_links(&p).is_empty());
+}
+
+#[test]
+fn format_1_files_open_and_get_anchors() {
+    let (p, _) = with_replacements();
+    let mut v: serde_json::Value = serde_json::from_str(&p.to_json()).unwrap();
+    v["format_version"] = 1.into();
+    v.as_object_mut().unwrap().remove("versions");
+    for r in v["replacements"].as_array_mut().unwrap() {
+        r.as_object_mut().unwrap().remove("anchor");
+    }
+    let q = Project::load_json(&v.to_string()).unwrap();
+    assert_eq!(q.format_version, model::PROJECT_FORMAT_VERSION);
+    assert!(q.replacements.iter().all(|r| r.anchor.is_some()));
+    let mut newer = v.clone();
+    newer["format_version"] = 99.into();
+    assert!(Project::load_json(&newer.to_string()).unwrap_err().contains("Обновите программу"));
+}
+
+#[test]
+fn phone_page_and_qr_on_sheet() {
+    let (mut p, from) = with_replacements();
+    p.absences[0].reason = "больничный".into();
+    p.school.settings.public_url = "https://school.example/zameny.html".into();
+    let html = export::html_phone(&p, from, 2, "08.11.2026 07:30");
+    let first_day = p.replacements.iter().filter(|r| r.date == from).count();
+    assert!(html.matches("class=\"card").count() >= first_day);
+    assert!(html.contains("viewport"));
+    assert!(!html.contains("больничный"), "причина отсутствия не публикуется");
+    let sheet = export::html_replacements(&p, from, from);
+    assert!(sheet.contains("<svg") && !sheet.contains("больничный"));
+    let m = qr::matrix(&p.school.settings.public_url).unwrap();
+    assert!(m.size >= 21 && m.dark.iter().any(|d| *d));
+    let opts = printdoc::PrintOptions::new(from, from);
+    let doc = printdoc::build(&p, &[printdoc::Section::Replacements], &opts);
+    assert!(doc.pages.iter().any(|pg| pg.qr.is_some()));
+    assert!(!doc.pages.iter().any(|pg| pg.note.as_deref().unwrap_or("").contains("больничный")));
+    let pdf = export_pdf::write(&doc).unwrap();
+    assert!(pdf.len() > 10_000);
+    let docx = export_docx::write(&doc).unwrap();
+    assert!(!docx.is_empty());
+}
+
+#[test]
+fn loads_from_excel_template() {
+    let bytes = table_import::loads_template_xlsx().unwrap();
+    let rows = table_import::read_table(&bytes, "xlsx").unwrap();
+    assert_eq!(rows[0][0], "Класс");
+    let mut s = School {
+        name: "Тест".into(),
+        settings: Default::default(),
+        buildings: vec![model::Building { id: 1, name: "Здание".into(), address: String::new(), bells: vec![], travel_minutes: vec![] }],
+        rooms: vec![model::Room { id: 1, name: "201".into(), ..demo::demo_school().rooms[0].clone() }],
+        subjects: vec![],
+        teachers: vec![],
+        classes: vec![],
+        loads: vec![],
+    };
+    let r = table_import::import_loads(&mut s, &rows, false).unwrap();
+    // 5 строк: английский в 5а — одна нагрузка с двумя группами, физкультура — поток 5а+5б.
+    assert_eq!(r.loads, 4, "{r:?}");
+    assert_eq!(s.classes.len(), 2);
+    let eng = s.loads.iter().find(|l| l.groups.len() == 2).expect("нагрузка с группами");
+    assert_eq!(eng.hours_per_week, 3);
+    assert!(s.loads.iter().any(|l| l.classes.len() == 2), "поток 5а, 5б");
+    // «Иванова Анна Сергеевна» и «Иванова А.С.» — один учитель.
+    assert_eq!(s.teachers.iter().filter(|t| t.last_name == "Иванова").count(), 1);
+    assert!(s.loads[0].groups[0].rooms == vec![1], "кабинет 201 найден");
+    assert!(r.warnings.iter().any(|w| w.contains("Спортзал")));
+    let t = s.teachers.iter().find(|t| t.last_name == "Иванова").unwrap();
+    assert!(!t.subjects.is_empty(), "предмет добавлен учителю");
+    // CSV с точкой с запятой и латинской «a» в классе.
+    let csv = "Класс;Предмет;Учитель;Часов в неделю\n5a;Математика;Иванова А.С.;4\n6а;История;Новиков Пётр;2\n7а;Химия;Кто-то;полтора\n";
+    let rows = table_import::read_table(csv.as_bytes(), "csv").unwrap();
+    let r2 = table_import::import_loads(&mut s, &rows, false).unwrap();
+    assert_eq!(r2.loads, 2);
+    assert_eq!(r2.warnings.len(), 1);
+    assert_eq!(s.classes.len(), 3, "5a = 5а, добавился только 6а");
+}
+
+#[test]
+fn difficulty_table_roundtrip() {
+    let mut s = demo::demo_school();
+    let csv = table_import::difficulty_csv(&s);
+    let mut rows = table_import::read_table(csv.as_bytes(), "csv").unwrap();
+    rows[2][2] = "11".into();
+    let name = rows[2][0].clone();
+    let (n, w) = table_import::apply_difficulty(&mut s, &rows).unwrap();
+    assert_eq!(n, s.subjects.len());
+    assert!(w.is_empty(), "{w:?}");
+    assert_eq!(s.subjects.iter().find(|x| x.name == name).unwrap().difficulty[0], 11);
+}
+
+#[test]
+fn control_schools_are_feasible_and_room_overload_is_explained() {
+    for k in 1..=4 {
+        let s = demo::scaled_school(k);
+        assert_eq!(s.classes.len(), 13 * k);
+        let errs: Vec<_> = precheck(&s).into_iter().filter(|i| i.severity == Severity::Error).collect();
+        assert!(errs.is_empty(), "k={k}: {errs:#?}");
+    }
+    // Все начальные классы трёх копий в одном спортзале — не помещается, и precheck это объясняет.
+    let mut s = demo::scaled_school(3);
+    let gym = s.rooms.iter().find(|r| r.name == "Спортзал НШ").unwrap().id;
+    for l in s.loads.iter_mut() {
+        for g in l.groups.iter_mut() {
+            if g.rooms.len() == 1 && s.rooms.iter().any(|r| r.id == g.rooms[0] && r.name.starts_with("Спортзал НШ")) {
+                g.rooms = vec![gym];
+            }
+        }
+    }
+    let msgs: Vec<String> = precheck(&s).into_iter().filter(|i| i.code == "room_hours").map(|i| i.message).collect();
+    assert!(msgs.iter().any(|m| m.contains("Спортзал НШ") && m.contains("Не встанут")), "{msgs:?}");
+}
+
+/// Регрессия 1.0: в режиме «считать N секунд» (так работает программа) генератор
+/// не охлаждался и давал расписание в разы хуже, чем с ограничением итераций.
+#[test]
+fn time_limited_solve_is_as_good_as_iteration_limited() {
+    let s = demo::demo_school();
+    let by_iter = solver::solve(&s, &solver::SolveOptions { seed: 5, max_iterations: 400_000, time_limit: Duration::from_secs(60), ..Default::default() });
+    let by_time = solver::solve(&s, &solver::SolveOptions { seed: 5, max_iterations: u64::MAX / 2, time_limit: Duration::from_secs(4), ..Default::default() });
+    let a = analyze(&s, &by_iter.timetable).score;
+    let b = analyze(&s, &by_time.timetable).score;
+    assert_eq!(by_time.unplaced, 0);
+    assert!(b <= a * 3 + 100, "по времени {b}, по итерациям {a}");
 }

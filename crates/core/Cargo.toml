@@ -16,3 +16,6 @@ encoding_rs = "0.8.44"
 printpdf = { version = "0.7.0", default-features = false, features = ["font_subsetting"] }
 zip = { version = "2", default-features = false, features = ["deflate"] }
 ttf-parser = "0.25"
+qrcode = { version = "0.14", default-features = false }
+calamine = { version = "0.38.0", default-features = false }
+rust_xlsxwriter = { version = "0.102.0", default-features = false }

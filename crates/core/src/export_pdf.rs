@@ -89,7 +89,7 @@ impl Canvas {
         let r = Rect::new(Mm(x), Mm(self.h - y_top - h), Mm(x + w), Mm(self.h - y_top));
         if let Some(f) = fill {
             self.layer.set_fill_color(rgb(f));
-            self.layer.add_rect(r.clone().with_mode(path::PaintMode::Fill));
+            self.layer.add_rect(r.with_mode(path::PaintMode::Fill));
         }
         if let Some((s, t)) = stroke {
             self.layer.set_outline_color(rgb(s));
@@ -155,6 +155,25 @@ fn page_header(c: &Ctx, cv: &mut Canvas, doc: &PrintDoc, page: &DocPage, cont: b
         for l in c.m.wrap(n, 9.0, false, cv.w - 2.0 * MARGIN) {
             cv.text(c, &l, 9.0, MARGIN, cv.y, false, 0x1B1F24);
             cv.y += 4.5;
+        }
+    }
+    if let (Some(url), false) = (&page.qr, cont) {
+        if let Some(m) = crate::qr::matrix(url) {
+            let side = 20.0;
+            let cell = side / m.size as f32;
+            cv.y += 1.5;
+            for y in 0..m.size {
+                for x in 0..m.size {
+                    if m.get(x, y) {
+                        cv.rect(MARGIN + x as f32 * cell, cv.y + y as f32 * cell, cell + 0.01, cell + 0.01, Some(0x000000), None);
+                    }
+                }
+            }
+            cv.text(c, "Замены на телефоне", 9.0, MARGIN + side + 4.0, cv.y + 5.0, true, 0x1B1F24);
+            for (k, l) in c.m.wrap(url, 8.0, false, cv.w - 2.0 * MARGIN - side - 4.0).iter().enumerate() {
+                cv.text(c, l, 8.0, MARGIN + side + 4.0, cv.y + 10.0 + k as f32 * 4.0, false, 0x57606A);
+            }
+            cv.y += side + 2.0;
         }
     }
     cv.y += 2.0;

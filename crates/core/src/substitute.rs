@@ -99,6 +99,19 @@ impl<'a> SubContext<'a> {
         self.lesson_by_id.get(&id).map(|i| &self.tt.lessons[*i])
     }
 
+    /// Урок замены. Для замен из истории (урока в текущем расписании уже нет)
+    /// урок восстанавливается по якорю: нагрузка, день и номер урока.
+    pub fn rep_lesson(&self, r: &Replacement) -> Option<Lesson> {
+        if let Some(l) = self.lesson(r.lesson) {
+            return Some(l.clone());
+        }
+        let a = r.anchor?;
+        let day = day_of(r.date, self.school.settings.days_per_week)?;
+        let load = self.ix.load(a.load)?;
+        let rooms = load.groups.iter().map(|g| g.rooms.first().copied().unwrap_or(0)).collect();
+        Some(Lesson { id: 0, load: a.load, slot: Slot::new(day, a.period), rooms, pinned: false })
+    }
+
     pub fn is_absent(&self, t: Id, date: NaiveDate, period: u8) -> bool {
         self.absences.iter().any(|a| a.teacher == t && a.covers(date, period))
     }
@@ -495,12 +508,14 @@ pub fn auto_plan(ctx: &SubContext, existing: &[Replacement], from: NaiveDate, to
                     },
                     note: sg.reasons.first().cloned().unwrap_or_default(),
                     confirmed: false,
+                    anchor: ctx.lesson(a.lesson_id).map(|l| Anchor { load: l.load, period: l.slot.period }),
+                    stale: false,
                 });
             }
             None => unresolved.push((a, sugg)),
         }
     }
-    planned.sort_by_key(|r| (r.date, ctx.lesson(r.lesson).map(|l| l.slot.period), r.lesson));
+    planned.sort_by_key(|r| (r.date, ctx.rep_lesson(r).map(|l| l.slot.period), r.lesson));
     AutoPlan { replacements: planned, unresolved }
 }
 
@@ -512,7 +527,20 @@ pub fn check_replacements(ctx: &SubContext, reps: &[Replacement]) -> Vec<Issue> 
     let mut sub_at: HashMap<(NaiveDate, Id, Slot), Id> = HashMap::new();
     let mut room_at: HashMap<(NaiveDate, Id, Slot), Id> = HashMap::new();
     for r in reps {
+        if r.stale {
+            out.push(Issue {
+                severity: Severity::Warning,
+                code: "rep_stale",
+                message: format!("Замена #{} на {}: после пересоставления урок переехал — проверьте, свободен ли заменяющий", r.id, r.date.format("%d.%m.%Y")),
+                slot: None,
+                lessons: vec![r.lesson],
+            });
+        }
         let Some(l) = ctx.lesson(r.lesson) else {
+            if r.lesson == 0 && r.anchor.is_some() {
+                // Замена из истории: урок был в прежнем расписании.
+                continue;
+            }
             out.push(Issue {
                 severity: Severity::Error,
                 code: "rep_bad_lesson",

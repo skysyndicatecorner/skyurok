@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 pub type Id = u32;
 
-pub const PROJECT_FORMAT_VERSION: u32 = 1;
+pub const PROJECT_FORMAT_VERSION: u32 = 2;
 
 /// Ячейка недельной сетки: день (0 = понедельник) и номер урока (0 = первый).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
@@ -77,6 +77,9 @@ pub struct Settings {
     pub hygiene: HygieneProfile,
     #[serde(default)]
     pub weights: Weights,
+    /// Адрес страницы замен на сайте школы — для QR-кода на листе замен.
+    #[serde(default)]
+    pub public_url: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -143,6 +146,7 @@ impl Default for Settings {
             classes_may_start_later: false,
             hygiene: HygieneProfile::default(),
             weights: Weights::default(),
+            public_url: String::new(),
         }
     }
 }
@@ -426,6 +430,33 @@ pub struct Replacement {
     /// Подтверждена ли замена человеком (автоподбор создаёт черновики).
     #[serde(default)]
     pub confirmed: bool,
+    /// Какой урок заменяется: нагрузка и номер урока. Номера уроков (`lesson`)
+    /// меняются при каждом составлении, а якорь — нет: по нему замена находит
+    /// свой урок в новом расписании, а прошлые замены остаются в табеле и печати.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub anchor: Option<Anchor>,
+    /// Урок переехал при пересоставлении — замену нужно пересмотреть.
+    #[serde(default)]
+    pub stale: bool,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Anchor {
+    pub load: Id,
+    pub period: u8,
+}
+
+/// Сохранённая версия расписания.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TimetableVersion {
+    pub id: Id,
+    pub name: String,
+    /// Когда сохранена, «ГГГГ-ММ-ДД ЧЧ:ММ».
+    pub created: String,
+    /// Сохранена автоматически (перед составлением или восстановлением).
+    #[serde(default)]
+    pub auto: bool,
+    pub timetable: Timetable,
 }
 
 /// Весь проект в одном файле.
@@ -441,19 +472,49 @@ pub struct Project {
     pub replacements: Vec<Replacement>,
     #[serde(default)]
     pub class_absences: Vec<ClassAbsence>,
+    #[serde(default)]
+    pub versions: Vec<TimetableVersion>,
 }
 
 impl Project {
     pub fn new(school: School) -> Self {
-        Self { format_version: PROJECT_FORMAT_VERSION, school, timetable: Timetable::default(), absences: vec![], replacements: vec![], class_absences: vec![] }
+        Self {
+            format_version: PROJECT_FORMAT_VERSION,
+            school,
+            timetable: Timetable::default(),
+            absences: vec![],
+            replacements: vec![],
+            class_absences: vec![],
+            versions: vec![],
+        }
     }
 
     pub fn load_json(text: &str) -> Result<Self, String> {
-        let p: Project = serde_json::from_str(text).map_err(|e| e.to_string())?;
+        let mut p: Project = serde_json::from_str(text).map_err(|e| e.to_string())?;
         if p.format_version > PROJECT_FORMAT_VERSION {
-            return Err(format!("Файл создан более новой версией (формат {}), эта версия читает до {}", p.format_version, PROJECT_FORMAT_VERSION));
+            return Err(format!(
+                "Файл создан более новой версией SkyUrok (формат {}). Эта версия читает формат до {}. Обновите программу.",
+                p.format_version, PROJECT_FORMAT_VERSION
+            ));
         }
+        // Формат 1 → 2: у замен появились якоря, у проекта — версии расписания.
+        p.format_version = PROJECT_FORMAT_VERSION;
+        p.normalize();
         Ok(p)
+    }
+
+    /// Достраивает служебные поля: якоря замен по текущему расписанию.
+    /// Вызывается после загрузки и после каждого изменения проекта.
+    pub fn normalize(&mut self) {
+        if self.replacements.iter().all(|r| r.anchor.is_some()) {
+            return;
+        }
+        let by_id: std::collections::HashMap<Id, &Lesson> = self.timetable.lessons.iter().map(|l| (l.id, l)).collect();
+        for r in self.replacements.iter_mut().filter(|r| r.anchor.is_none()) {
+            if let Some(l) = by_id.get(&r.lesson) {
+                r.anchor = Some(Anchor { load: l.load, period: l.slot.period });
+            }
+        }
     }
 
     pub fn to_json(&self) -> String {

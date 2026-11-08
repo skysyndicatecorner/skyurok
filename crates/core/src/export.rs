@@ -19,6 +19,7 @@ td.n{width:28px;text-align:center;color:#555}td.e{background:#fafafa}
 .rep{background:#fff4d6}.cancel{background:#fde2e2;text-decoration:line-through}
 .page{page-break-after:always;break-after:page}.page:last-child{page-break-after:auto}
 .small{font-size:11px;color:#666}
+.qr{display:flex;gap:10px;align-items:center;margin:0 0 10px}
 @media print{body{margin:10mm}@page{size:A4;margin:8mm}.noprint{display:none}}
 @media print and (orientation:landscape){@page{size:A4 landscape}}
 "#;
@@ -221,7 +222,7 @@ pub fn html_replacements(p: &Project, from: NaiveDate, to: NaiveDate) -> String 
     let ctx = SubContext::new(&p.school, &p.timetable, &p.absences).with_classes(&p.class_absences);
     let mut reps: Vec<&Replacement> = p.replacements.iter().filter(|r| r.date >= from && r.date <= to).collect();
     reps.sort_by_key(|r| {
-        (r.date, ctx.lesson(r.lesson).map(|l| l.slot.period), ctx.lesson(r.lesson).and_then(|l| ix.load(l.load)).map(|ld| ix.classes_label(&ld.classes)))
+        (r.date, ctx.rep_lesson(r).map(|l| l.slot.period), ctx.rep_lesson(r).and_then(|l| ix.load(l.load)).map(|ld| ix.classes_label(&ld.classes)))
     });
     let mut body = String::new();
     let mut date = from;
@@ -236,24 +237,23 @@ pub fn html_replacements(p: &Project, from: NaiveDate, to: NaiveDate) -> String 
                 wd.to_lowercase(),
                 esc(&p.school.name)
             );
+            let url = p.school.settings.public_url.trim();
+            if let Some(svg) = Some(url).filter(|u| !u.is_empty()).and_then(|u| crate::qr::svg(u, 96)) {
+                let _ = write!(body, "<div class=qr>{svg}<div><b>Замены на телефоне</b><br><span class=small>{}</span></div></div>", esc(url));
+            }
             let absent: Vec<String> = p
                 .absences
                 .iter()
                 .filter(|a| date >= a.from && date <= a.to)
-                .map(|a| {
-                    let mut s = ix.teacher_name(a.teacher);
-                    if !a.reason.is_empty() {
-                        s.push_str(&format!(" — {}", a.reason));
-                    }
-                    s
-                })
+                // Причины отсутствия на лист не выводятся: он висит на виду.
+                .map(|a| ix.teacher_name(a.teacher))
                 .collect();
             if !absent.is_empty() {
                 let _ = write!(body, "<p><b>Отсутствуют:</b> {}</p>", esc(&absent.join("; ")));
             }
             body.push_str("<table><tr><th>Урок</th><th>Класс</th><th>Было</th><th>Стало</th><th>Предмет</th><th>Кабинет</th><th>Примечание</th></tr>");
             for r in day {
-                let Some(l) = ctx.lesson(r.lesson) else {
+                let Some(l) = ctx.rep_lesson(r) else {
                     continue;
                 };
                 let Some(load) = ix.load(l.load) else {
@@ -401,9 +401,9 @@ pub fn csv_replacements(p: &Project, from: NaiveDate, to: NaiveDate) -> String {
     let ctx = SubContext::new(&p.school, &p.timetable, &p.absences).with_classes(&p.class_absences);
     let mut out = String::from("\u{feff}Дата;Урок;Класс;Было (учитель);Было (предмет);Стало;Предмет;Кабинет;Статус;Примечание\n");
     let mut reps: Vec<&Replacement> = p.replacements.iter().filter(|r| r.date >= from && r.date <= to).collect();
-    reps.sort_by_key(|r| (r.date, ctx.lesson(r.lesson).map(|l| l.slot.period)));
+    reps.sort_by_key(|r| (r.date, ctx.rep_lesson(r).map(|l| l.slot.period)));
     for r in reps {
-        let Some(l) = ctx.lesson(r.lesson) else {
+        let Some(l) = ctx.rep_lesson(r) else {
             continue;
         };
         let Some(load) = ix.load(l.load) else {
@@ -471,7 +471,7 @@ pub fn json_public(p: &Project, from: NaiveDate, to: NaiveDate) -> String {
         .iter()
         .filter(|r| r.date >= from && r.date <= to)
         .filter_map(|r| {
-            let l = ctx.lesson(r.lesson)?;
+            let l = ctx.rep_lesson(r)?;
             let load = ix.load(l.load)?;
             let g = load.groups.get(r.group)?;
             let (now, subj) = rep_kind_text(&ix, &ctx, r);
@@ -496,4 +496,99 @@ pub fn json_public(p: &Project, from: NaiveDate, to: NaiveDate) -> String {
         "replacements": reps,
     }))
     .unwrap()
+}
+
+const PHONE_CSS: &str = r#"
+*{box-sizing:border-box}body{font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;margin:0;background:#f6f8fa;color:#1b1f24;font-size:17px;line-height:1.4}
+header{background:#0a58ca;color:#fff;padding:14px 16px}header h1{font-size:20px;margin:0}header p{margin:2px 0 0;font-size:14px;opacity:.9}
+main{padding:12px 12px 32px;max-width:640px;margin:0 auto}
+input{width:100%;font-size:17px;padding:12px;border:1px solid #7d8590;border-radius:10px;margin:4px 0 12px;background:#fff;color:inherit}
+h2{font-size:18px;margin:18px 4px 8px}
+.card{background:#fff;border:1px solid #d8dee4;border-radius:12px;padding:12px 14px;margin:0 0 8px}
+.card .top{display:flex;justify-content:space-between;gap:8px;font-weight:600}.n{color:#57606a;font-weight:400}
+.was{color:#57606a;font-size:15px}.now{margin-top:4px}.cancel .now{color:#b42318;font-weight:600}
+.empty{color:#57606a;padding:8px 4px}footer{color:#57606a;font-size:13px;text-align:center;padding:16px}
+@media (prefers-color-scheme:dark){body{background:#0d1117;color:#e6edf3}header{background:#1f4d8c}.card,input{background:#161b22;border-color:#30363d}.was,.n,.empty,footer{color:#9ba7b4}.cancel .now{color:#ff8a80}}
+"#;
+
+const PHONE_JS: &str = "const q=document.getElementById('q');q.addEventListener('input',()=>{const v=q.value.trim().toLowerCase();document.querySelectorAll('.card').forEach(c=>{c.style.display=!v||c.dataset.s.includes(v)?'':'none'})});";
+
+/// Страница замен для телефона: на ближайшие `days` учебных дней начиная с `from`.
+/// Один файл без внешних ссылок — его можно положить на сайт школы как есть.
+/// Причины отсутствия не публикуются.
+pub fn html_phone(p: &Project, from: NaiveDate, days: usize, generated: &str) -> String {
+    let ix = Index::new(&p.school);
+    let ctx = SubContext::new(&p.school, &p.timetable, &p.absences).with_classes(&p.class_absences);
+    let mut body = String::new();
+    let _ = write!(
+        body,
+        "<header><h1>Замены · {}</h1><p>Обновлено {}</p></header><main><input id=q type=search placeholder=\"Класс или фамилия учителя\" aria-label=\"Поиск по классу или учителю\">",
+        esc(&p.school.name),
+        esc(generated)
+    );
+    let mut date = from;
+    let mut shown = 0;
+    let mut guard = 0;
+    while shown < days && guard < 14 {
+        guard += 1;
+        if day_of(date, p.school.settings.days_per_week).is_some() {
+            shown += 1;
+            let wd = day_of(date, 7).map(|d| DAY_NAMES_FULL[d as usize]).unwrap_or("");
+            let _ = write!(body, "<h2>{}, {}</h2>", wd, date.format("%d.%m"));
+            let mut reps: Vec<(u8, String, &Replacement, Lesson)> = p
+                .replacements
+                .iter()
+                .filter(|r| r.date == date)
+                .filter_map(|r| {
+                    let l = ctx.rep_lesson(r)?;
+                    let cls = ix.load(l.load).map(|ld| ix.classes_label(&ld.classes)).unwrap_or_default();
+                    Some((l.slot.period, cls, r, l))
+                })
+                .collect();
+            reps.sort_by(|a, b| (a.0, &a.1).cmp(&(b.0, &b.1)));
+            if reps.is_empty() {
+                body.push_str("<div class=empty>Замен нет</div>");
+            }
+            for (period, cls, r, l) in reps {
+                let Some(load) = ix.load(l.load) else { continue };
+                let g = &load.groups[r.group.min(load.groups.len() - 1)];
+                let was_t = ix.teacher_name(r.original_teacher);
+                let subj = ix.subject_name(g.subject);
+                let (now, now_subj) = rep_kind_text(&ix, &ctx, r);
+                let room = r.room.or_else(|| l.rooms.get(r.group).copied()).map(|x| ix.room_name(x)).unwrap_or_default();
+                let group = if g.label.is_empty() { String::new() } else { format!(" ({})", g.label) };
+                let now_line = match r.kind {
+                    ReplacementKind::Cancel => "Урок снят".to_string(),
+                    _ => format!(
+                        "Ведёт: {}{}{}",
+                        now,
+                        if now_subj.is_empty() || now_subj == subj { String::new() } else { format!(", {now_subj}") },
+                        if room.is_empty() { String::new() } else { format!(" · каб. {room}") }
+                    ),
+                };
+                let search = format!("{cls} {was_t} {now} {subj}").to_lowercase();
+                let _ = write!(
+                    body,
+                    "<div class=\"card{}\" data-s=\"{}\"><div class=top><span>{}{}</span><span class=n>{} урок</span></div><div class=was>{} · по расписанию {}</div><div class=now>{}</div></div>",
+                    if r.kind == ReplacementKind::Cancel { " cancel" } else { "" },
+                    esc(&search).replace('"', "&quot;"),
+                    esc(&cls),
+                    esc(&group),
+                    period + 1,
+                    esc(&subj),
+                    esc(&was_t),
+                    esc(&now_line)
+                );
+            }
+        }
+        date = date.succ_opt().unwrap();
+    }
+    body.push_str("</main><footer>SkyUrok</footer>");
+    format!(
+        "<!DOCTYPE html><html lang=\"ru\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Замены · {}</title><style>{}</style></head><body>{}<script>{}</script></body></html>",
+        esc(&p.school.name),
+        PHONE_CSS,
+        body,
+        PHONE_JS
+    )
 }

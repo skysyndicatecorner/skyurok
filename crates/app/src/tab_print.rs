@@ -66,6 +66,7 @@ pub struct State {
     grayscale: bool,
     full_names: bool,
     rooms: bool,
+    reasons: bool,
     from: NaiveDate,
     to: NaiveDate,
     from_buf: String,
@@ -92,6 +93,7 @@ impl Default for State {
             grayscale: false,
             full_names: false,
             rooms: true,
+            reasons: false,
             from: mon,
             to: mon + chrono::Duration::days(6),
             from_buf: String::new(),
@@ -216,6 +218,7 @@ fn options(app: &SkyApp, draft: bool) -> PrintOptions {
     o.grayscale = st.grayscale;
     o.full_names = st.full_names;
     o.rooms = st.rooms;
+    o.reasons = st.reasons;
     o.draft = draft;
     o
 }
@@ -372,6 +375,8 @@ pub fn show(app: &mut SkyApp, ui: &mut egui::Ui) {
                 ui.checkbox(&mut st.approve, "Гриф «Утверждаю» с подписью директора");
                 ui.checkbox(&mut st.bells, "Время звонков в таблице");
                 ui.checkbox(&mut st.rooms, "Кабинеты");
+                ui.checkbox(&mut st.reasons, "Причины отсутствия на листе замен")
+                    .on_hover_text("Лист висит на виду, а «больничный» — личные сведения. По умолчанию причины не печатаются.");
                 ui.checkbox(&mut st.full_names, "Имена и отчества полностью");
                 ui.checkbox(&mut st.grayscale, "Чёрно-белая печать (без заливок)");
                 ui.label(theme::small("Проблемные уроки отмечены рамкой и знаком «!» — видно и в ч/б."));
